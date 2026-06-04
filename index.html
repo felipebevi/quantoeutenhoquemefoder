@@ -258,7 +258,7 @@
     <h3>Histórico <button class="x" data-close="logModal">&times;</button></h3>
     <div class="logwrap">
       <table id="logTable">
-        <thead><tr><th>Hora</th><th>Preço</th><th>Tempo</th></tr></thead>
+        <thead><tr><th>Hora</th><th>Preço</th><th>Moeda</th><th>Tempo</th></tr></thead>
         <tbody id="logBody"></tbody>
       </table>
       <div class="empty" id="logEmpty">Nenhuma leitura ainda.</div>
@@ -414,6 +414,17 @@
 
   // país atualmente selecionado (no modo "country")
   function paisAtual(){ return economias ? economias.paises.find(p=>p.codigo===countryCode) : null; }
+
+  // Converte um preço em R$ para a moeda do país selecionado (em modo "country").
+  // No modo "Meu salário" (BRL), retorna string vazia → coluna mostra "—".
+  function convertedFmt(precoBRL){
+    if(baseMode!=='country') return '';
+    const p=paisAtual();
+    if(!p || !p.cotacaoBRL || p.cotacaoBRL<=0) return '';
+    if(p.moeda==='BRL') return '';                       // mesma moeda do preço
+    const val=precoBRL/p.cotacaoBRL;                     // R$ / (R$/unidade) = unidades
+    return `${p.simbolo} ${val.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  }
 
   // salário mensal convertido para BRL (próprio, ou mínimo do país × cotação)
   function salarioMensalBRL(){
@@ -824,7 +835,8 @@
       // log com dedup por valor dentro da janela
       if(!recentlyLogged(pr.price, t)){
         addLog({ ts:t, time:nowHM(), precoLido:pr.price, precoFmt:priceFmt,
-                 horasDecimais:horasDec, horasFmt:durFmt });
+                 horasDecimais:horasDec, horasFmt:durFmt,
+                 moedaFmt: convertedFmt(pr.price) });
         recentLogs.push({ val:pr.price, ts:t });
       }
     }
@@ -936,7 +948,8 @@
     $('logEmpty').style.display = logEntries.length? 'none':'block';
     for(const e of logEntries){
       const tr=document.createElement('tr');
-      tr.innerHTML=`<td class="t">${e.time}</td><td class="p">${e.precoFmt}</td><td class="h">${e.horasFmt}</td>`;
+      const m = e.moedaFmt ? e.moedaFmt : '—';     // entradas antigas sem moedaFmt → "—"
+      tr.innerHTML=`<td class="t">${e.time}</td><td class="p">${e.precoFmt}</td><td class="p">${m}</td><td class="h">${e.horasFmt}</td>`;
       body.appendChild(tr);
     }
   }
@@ -944,7 +957,10 @@
   function exportLog(){
     if(!logEntries.length){ showToast('Nada para exportar.'); return; }
     // texto puro, linha por linha
-    const lines = logEntries.map(e=>`${e.time} | ${e.precoFmt} | ${e.horasFmt}`);
+    const lines = logEntries.map(e=>{
+      const m = e.moedaFmt ? ` | ${e.moedaFmt}` : '';
+      return `${e.time} | ${e.precoFmt}${m} | ${e.horasFmt}`;
+    });
     const text = 'Quanto eu tenho que me foder — histórico\n'+lines.join('\n');
     if(navigator.share){
       navigator.share({ text }).catch(()=>{});
@@ -1123,8 +1139,9 @@
       if(resultBox){ clearCurrentResult(true); showToast('Leitura descartada — lendo de novo'); }
     });
 
-    $('baseBtn').addEventListener('click', ()=>openBase(false));
-    $('logBtn').addEventListener('click', ()=>{ renderLog(); openModal('logModal'); });
+    // stopPropagation evita que o handler de "toque para reler" no camScreen rode junto
+    $('baseBtn').addEventListener('click', e=>{ e.stopPropagation(); openBase(false); });
+    $('logBtn').addEventListener('click', e=>{ e.stopPropagation(); renderLog(); openModal('logModal'); });
 
     // ----- modal de valor base -----
     $('baseSeg').querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{

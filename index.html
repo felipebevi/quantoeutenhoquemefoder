@@ -145,6 +145,7 @@
   table{width:100%;border-collapse:collapse;font-size:13.5px;}
   th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);}
   th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0;background:var(--card);}
+  tbody tr:active td{background:rgba(255,255,255,.06);}   /* feedback de toque na linha */
   td.t{color:var(--muted);white-space:nowrap;}
   td.p{font-weight:700;white-space:nowrap;}
   td.h{color:var(--accent);font-weight:700;white-space:nowrap;}
@@ -949,6 +950,8 @@
     for(const e of logEntries){
       const tr=document.createElement('tr');
       const m = e.moedaFmt ? e.moedaFmt : '—';     // entradas antigas sem moedaFmt → "—"
+      tr.dataset.ts=e.ts; tr.dataset.idx=logEntries.indexOf(e);   // p/ identificar no toque
+      tr.style.cursor='pointer';
       tr.innerHTML=`<td class="t">${e.time}</td><td class="p">${e.precoFmt}</td><td class="p">${m}</td><td class="h">${e.horasFmt}</td>`;
       body.appendChild(tr);
     }
@@ -1170,7 +1173,20 @@
     $('exportBtn').addEventListener('click', exportLog);
     $('clearLogBtn').addEventListener('click', ()=>{
       if(!logEntries.length) return;
+      if(!confirm('Limpar todo o histórico?')) return;
       logEntries=[]; saveLog(); renderLog(); showToast('Histórico limpo.');
+    });
+    // Toque numa linha do log → confirma e remove só aquela entrada.
+    $('logBody').addEventListener('click', e=>{
+      const tr=e.target.closest('tr'); if(!tr) return;
+      const ts=parseInt(tr.dataset.ts,10), idx=parseInt(tr.dataset.idx,10);
+      const entry = !isNaN(idx) ? logEntries[idx] : logEntries.find(x=>x.ts===ts);
+      if(!entry) return;
+      if(!confirm(`Remover esta leitura?\n\n${entry.time}  ${entry.precoFmt}  →  ${entry.horasFmt}`)) return;
+      // remove pela posição (mais seguro: várias entradas podem ter o mesmo ts)
+      if(!isNaN(idx) && logEntries[idx]===entry) logEntries.splice(idx,1);
+      else logEntries=logEntries.filter(x=>x!==entry);
+      saveLog(); renderLog(); showToast('Entrada removida.');
     });
 
     document.querySelectorAll('[data-close]').forEach(b=>

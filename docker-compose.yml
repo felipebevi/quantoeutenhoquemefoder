@@ -1,0 +1,61 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: quantoeutenhoquemefoder-web
+    container_name: quantoeutenhoquemefoder-web
+    restart: unless-stopped
+    # monta o economias.json do host (atualizado pelo cron via update-rates.sh)
+    # por cima do que veio na imagem, para refletir as cotações sem rebuild.
+    volumes:
+      - ./economias.json:/usr/share/nginx/html/economias.json:ro
+    networks:
+      - traefik_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_net"
+
+      # ── HTTPS apex — quantoeutenhoquemefoder.com.br (+ SAN www) ─────────
+      - "traefik.http.routers.qtqmf.rule=Host(`quantoeutenhoquemefoder.com.br`)"
+      - "traefik.http.routers.qtqmf.entrypoints=websecure"
+      - "traefik.http.routers.qtqmf.tls=true"
+      - "traefik.http.routers.qtqmf.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.qtqmf.tls.domains[0].main=quantoeutenhoquemefoder.com.br"
+      - "traefik.http.routers.qtqmf.tls.domains[0].sans=www.quantoeutenhoquemefoder.com.br"
+      - "traefik.http.routers.qtqmf.service=qtqmf"
+      - "traefik.http.routers.qtqmf.middlewares=qtqmf-headers@docker"
+
+      # ── HTTPS www → redirect para o apex ───────────────────────────────
+      - "traefik.http.routers.qtqmf-www.rule=Host(`www.quantoeutenhoquemefoder.com.br`)"
+      - "traefik.http.routers.qtqmf-www.entrypoints=websecure"
+      - "traefik.http.routers.qtqmf-www.tls=true"
+      - "traefik.http.routers.qtqmf-www.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.qtqmf-www.service=qtqmf"
+      - "traefik.http.routers.qtqmf-www.middlewares=qtqmf-www-redirect@docker"
+      - "traefik.http.middlewares.qtqmf-www-redirect.redirectregex.regex=^https://www\\.quantoeutenhoquemefoder\\.com\\.br/(.*)"
+      - "traefik.http.middlewares.qtqmf-www-redirect.redirectregex.replacement=https://quantoeutenhoquemefoder.com.br/$${1}"
+      - "traefik.http.middlewares.qtqmf-www-redirect.redirectregex.permanent=true"
+
+      # ── HTTP → HTTPS (apex e www) ──────────────────────────────────────
+      - "traefik.http.routers.qtqmf-http.rule=Host(`quantoeutenhoquemefoder.com.br`) || Host(`www.quantoeutenhoquemefoder.com.br`)"
+      - "traefik.http.routers.qtqmf-http.entrypoints=web"
+      - "traefik.http.routers.qtqmf-http.middlewares=qtqmf-https-redirect@docker"
+      - "traefik.http.middlewares.qtqmf-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.qtqmf-https-redirect.redirectscheme.permanent=true"
+
+      # ── Headers de segurança ───────────────────────────────────────────
+      # Permissions-Policy libera a câmera só p/ a própria origem (PWA precisa).
+      - "traefik.http.middlewares.qtqmf-headers.headers.customResponseHeaders.X-Frame-Options=SAMEORIGIN"
+      - "traefik.http.middlewares.qtqmf-headers.headers.customResponseHeaders.X-Content-Type-Options=nosniff"
+      - "traefik.http.middlewares.qtqmf-headers.headers.customResponseHeaders.Referrer-Policy=strict-origin-when-cross-origin"
+      - "traefik.http.middlewares.qtqmf-headers.headers.customResponseHeaders.Permissions-Policy=camera=(self)"
+      - "traefik.http.middlewares.qtqmf-headers.headers.STSSeconds=63072000"
+      - "traefik.http.middlewares.qtqmf-headers.headers.STSIncludeSubdomains=true"
+
+      # Porta interna do nginx
+      - "traefik.http.services.qtqmf.loadbalancer.server.port=80"
+
+networks:
+  traefik_net:
+    external: true

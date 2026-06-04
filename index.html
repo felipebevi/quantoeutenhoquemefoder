@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!-- viewport-fit=cover para usar a tela toda em notch/iOS; user-scalable=no para evitar zoom acidental durante o scan -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quanto eu tenho que me foder">
+<title>Quanto eu tenho que me foder</title>
+<meta name="description" content="Aponte a câmera para uma etiqueta e descubra quanto do seu tempo de trabalho aquele preço custa. OCR 100% local — nada sai do aparelho.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- SEO / compartilhamento -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quanto eu tenho que me foder">
+<meta property="og:title" content="Quanto eu tenho que me foder">
+<meta property="og:description" content="Descubra quanto do seu tempo de trabalho um preço custa. OCR 100% local.">
+<meta property="og:url" content="https://quantoeutenhoquemefoder.com.br/">
+<meta property="og:image" content="https://quantoeutenhoquemefoder.com.br/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Quanto eu tenho que me foder">
+<meta name="twitter:description" content="Descubra quanto do seu tempo de trabalho um preço custa.">
+<meta name="twitter:image" content="https://quantoeutenhoquemefoder.com.br/icon-512.png">
+<style>
+  /* ───────────────────────── Tema escuro, mobile-first ───────────────────────── */
+  :root{
+    --bg:#0a0a0a; --fg:#f5f5f5; --muted:#9a9a9a;
+    --accent:#e63946; --accent-d:#c1121f;
+    --danger:#ff5a5a; --card:#161616; --border:#2a2a2a;
+    --radius:14px;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overscroll-behavior:none;}
+  body{overflow:hidden;}
+  button{font-family:inherit;cursor:pointer;}
+  input{font-family:inherit;}
+
+  /* Telas empilhadas; só uma .active por vez */
+  .screen{position:fixed;inset:0;display:none;flex-direction:column;}
+  .screen.active{display:flex;}
+
+  /* ───────────────────────── Onboarding / valor base ───────────────────────── */
+  #setupScreen{justify-content:center;align-items:center;padding:24px;
+    padding-top:calc(24px + var(--safe-top));}
+  .card{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:26px 22px;}
+  .logo{font-size:30px;font-weight:800;letter-spacing:-.5px;text-align:center;margin:0 0 4px;}
+  .logo .em{color:var(--accent);}
+  .tagline{color:var(--muted);text-align:center;font-size:14px;margin:0 0 22px;line-height:1.45;}
+  label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px;font-weight:600;}
+  .field{display:flex;align-items:center;gap:8px;background:#0d0d0d;border:1px solid var(--border);
+    border-radius:11px;padding:0 14px;}
+  .field .prefix{color:var(--muted);font-size:18px;font-weight:700;}
+  .field input{flex:1;background:transparent;border:0;outline:0;color:var(--fg);
+    font-size:22px;font-weight:700;padding:15px 0;min-width:0;}
+  .field input::placeholder{color:#555;font-weight:500;}
+  .row2{display:flex;gap:12px;}
+  .row2 .col{flex:1;}
+  .hint{font-size:12px;color:var(--muted);margin:7px 2px 0;line-height:1.4;}
+  .btn{display:block;width:100%;border:0;border-radius:12px;background:var(--accent);
+    color:#fff;font-size:17px;font-weight:800;padding:16px;margin-top:22px;
+    transition:transform .08s, background .15s;}
+  .btn:active{transform:scale(.98);}
+  .btn:disabled{background:#333;color:#777;}
+  .btn.secondary{background:transparent;border:1px solid var(--border);color:var(--fg);}
+  .btn.ghost{background:transparent;color:var(--muted);box-shadow:none;font-weight:600;}
+
+  /* Seletor segmentado: "Meu salário" | "Salário mínimo de um país" */
+  .seg{display:flex;background:#0d0d0d;border:1px solid var(--border);border-radius:11px;
+    padding:4px;gap:4px;margin:6px 0 4px;}
+  .seg-btn{flex:1;background:transparent;border:0;color:var(--muted);font-size:12.5px;
+    font-weight:700;padding:11px 6px;border-radius:8px;line-height:1.15;}
+  .seg-btn.active{background:var(--accent);color:#fff;}
+  /* select de país (com bandeira) */
+  .field.sel{position:relative;}
+  .field.sel::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    color:var(--muted);pointer-events:none;font-size:14px;}
+  .field select{flex:1;appearance:none;-webkit-appearance:none;background:transparent;border:0;
+    outline:0;color:var(--fg);font-size:18px;font-weight:700;padding:15px 22px 15px 0;min-width:0;}
+  .field select option{background:#161616;color:var(--fg);}
+
+  /* ───────────────────────── Câmera ───────────────────────── */
+  #camScreen{background:#000;}
+  #video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;}
+  /* Canvas de overlay (mira + resultado) cobrindo a tela toda */
+  #overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+
+  /* Barra superior com botões discretos */
+  .topbar{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;
+    gap:10px;padding:calc(10px + var(--safe-top)) 14px 10px;
+    background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0));}
+  .chip{background:rgba(20,20,20,.72);border:1px solid rgba(255,255,255,.14);color:#fff;
+    border-radius:999px;padding:9px 14px;font-size:13px;font-weight:600;backdrop-filter:blur(6px);
+    display:inline-flex;align-items:center;gap:6px;}
+  .chip svg{width:15px;height:15px;}
+  .chip:active{background:rgba(40,40,40,.9);}
+
+  /* micro-indicador de consenso (3 pontinhos) na base */
+  .dots{position:absolute;left:50%;transform:translateX(-50%);z-index:5;
+    bottom:calc(26px + var(--safe-bottom));display:flex;gap:9px;opacity:0;transition:opacity .25s;}
+  .dots.show{opacity:1;}
+  .dots .d{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.28);
+    border:1px solid rgba(255,255,255,.45);transition:background .15s,transform .15s;}
+  .dots .d.on{background:var(--accent);transform:scale(1.18);}
+
+  /* dica de alinhamento */
+  .scanhint{position:absolute;left:50%;transform:translateX(-50%);z-index:5;
+    bottom:calc(64px + var(--safe-bottom));color:#fff;font-size:13px;font-weight:600;
+    background:rgba(0,0,0,.45);padding:7px 14px;border-radius:999px;backdrop-filter:blur(4px);
+    text-align:center;transition:opacity .3s;}
+
+  /* Tela de erro de câmera */
+  .camError{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;
+    justify-content:center;align-items:center;text-align:center;padding:28px;background:#0a0a0a;}
+  .camError.show{display:flex;}
+  .camError h2{margin:0 0 8px;font-size:20px;}
+  .camError p{color:var(--muted);font-size:14px;line-height:1.5;max-width:340px;margin:0 0 18px;}
+
+  /* gesto inicial (iOS exige gesto p/ iniciar câmera) */
+  #startGate{position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;text-align:center;padding:28px;background:#0a0a0a;}
+  #startGate.hide{display:none;}
+  #startGate .big{font-size:64px;margin-bottom:6px;}
+
+  /* ───────────────────────── Modais ───────────────────────── */
+  .modal{position:fixed;inset:0;z-index:20;display:none;background:rgba(0,0,0,.66);
+    backdrop-filter:blur(3px);align-items:flex-end;}
+  .modal.active{display:flex;}
+  .sheet{width:100%;max-height:86vh;background:var(--card);border-top-left-radius:20px;
+    border-top-right-radius:20px;border-top:1px solid var(--border);
+    padding:18px 18px calc(20px + var(--safe-bottom));display:flex;flex-direction:column;
+    animation:rise .22s ease;}
+  @keyframes rise{from{transform:translateY(100%);}to{transform:translateY(0);}}
+  .sheet h3{margin:2px 0 14px;font-size:18px;display:flex;align-items:center;justify-content:space-between;}
+  .sheet h3 .x{background:transparent;border:0;color:var(--muted);font-size:26px;line-height:1;padding:0 4px;}
+  .logwrap{overflow-y:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--border);}
+  th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0;background:var(--card);}
+  td.t{color:var(--muted);white-space:nowrap;}
+  td.p{font-weight:700;white-space:nowrap;}
+  td.h{color:var(--accent);font-weight:700;white-space:nowrap;}
+  .empty{color:var(--muted);text-align:center;padding:28px 0;font-size:14px;}
+  .toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%);
+    z-index:40;background:#fff;color:#111;padding:12px 18px;border-radius:10px;font-weight:700;
+    font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;pointer-events:none;
+    transition:opacity .2s, transform .2s;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px);}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ TELA 1 — VALOR BASE / ONBOARDING ════════════════ -->
+<section id="setupScreen" class="screen">
+  <div class="card">
+    <h1 class="logo">Quanto eu tenho<br>que me <span class="em">foder</span></h1>
+    <p class="tagline">Aponte a câmera para uma etiqueta e veja <b>quanto do seu tempo de trabalho</b> aquilo custa.</p>
+
+    <div class="seg" id="setupSeg">
+      <button type="button" class="seg-btn active" data-mode="custom">Meu salário</button>
+      <button type="button" class="seg-btn" data-mode="country">Salário mínimo de um país</button>
+    </div>
+
+    <div id="customBox">
+      <label for="salaryInput">Seu salário mensal líquido</label>
+      <div class="field">
+        <span class="prefix">R$</span>
+        <input id="salaryInput" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00">
+      </div>
+      <p class="hint">Fica salvo só no seu aparelho. Nada é enviado para a internet.</p>
+    </div>
+
+    <div id="countryBox" style="display:none">
+      <label for="countrySelect">País — salário mínimo mensal</label>
+      <div class="field sel"><select id="countrySelect"></select></div>
+      <p class="hint" id="countryHint"></p>
+    </div>
+
+    <label for="hoursInput" style="margin-top:18px">Horas trabalhadas por mês</label>
+    <div class="field">
+      <input id="hoursInput" type="text" inputmode="decimal" autocomplete="off" placeholder="220">
+    </div>
+    <p class="hint">Padrão CLT: 220h/mês. Ajuste se trabalhar mais ou menos.</p>
+
+    <button id="startBtn" class="btn" disabled>Começar</button>
+  </div>
+</section>
+
+<!-- ════════════════ TELA 2 — CÂMERA ════════════════ -->
+<section id="camScreen" class="screen">
+  <video id="video" playsinline muted autoplay></video>
+  <canvas id="overlay"></canvas>
+
+  <div class="topbar">
+    <button class="chip" id="baseBtn" aria-label="Valor base">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span id="baseBtnLabel">Valor base</span>
+    </button>
+    <button class="chip" id="logBtn" aria-label="Histórico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      Log
+    </button>
+  </div>
+
+  <div class="scanhint" id="scanHint">Alinhe o preço na mira · toque para reler</div>
+
+  <!-- Gesto inicial obrigatório (iOS) -->
+  <div id="startGate">
+    <div class="big">📷</div>
+    <h2 style="margin:0 0 6px">Pronto para escanear</h2>
+    <p class="tagline" style="max-width:300px">Toque abaixo para ligar a câmera traseira.</p>
+    <button class="btn" id="enableCamBtn" style="max-width:280px">Ligar câmera</button>
+  </div>
+
+  <!-- Erro de câmera -->
+  <div class="camError" id="camError">
+    <h2 id="camErrTitle">Câmera indisponível</h2>
+    <p id="camErrMsg"></p>
+    <button class="btn secondary" id="retryCamBtn" style="max-width:280px">Tentar de novo</button>
+  </div>
+</section>
+
+<!-- ════════════════ MODAL — VALOR BASE (edição) ════════════════ -->
+<div class="modal" id="baseModal">
+  <div class="sheet">
+    <h3>Valor base <button class="x" data-close="baseModal">&times;</button></h3>
+    <div class="seg" id="baseSeg">
+      <button type="button" class="seg-btn active" data-mode="custom">Meu salário</button>
+      <button type="button" class="seg-btn" data-mode="country">Salário mínimo de um país</button>
+    </div>
+    <div id="customBox2">
+      <label for="salaryInput2">Salário mensal líquido (R$)</label>
+      <div class="field"><span class="prefix">R$</span>
+        <input id="salaryInput2" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00"></div>
+    </div>
+    <div id="countryBox2" style="display:none">
+      <label for="countrySelect2">País — salário mínimo mensal</label>
+      <div class="field sel"><select id="countrySelect2"></select></div>
+    </div>
+    <label for="hoursInput2" style="margin-top:14px">Horas por mês</label>
+    <div class="field"><input id="hoursInput2" type="text" inputmode="decimal" autocomplete="off" placeholder="220"></div>
+    <p class="hint" id="rateHint"></p>
+    <button class="btn" id="saveBaseBtn">Salvar</button>
+  </div>
+</div>
+
+<!-- ════════════════ MODAL — LOG ════════════════ -->
+<div class="modal" id="logModal">
+  <div class="sheet">
+    <h3>Histórico <button class="x" data-close="logModal">&times;</button></h3>
+    <div class="logwrap">
+      <table id="logTable">
+        <thead><tr><th>Hora</th><th>Preço</th><th>Tempo</th></tr></thead>
+        <tbody id="logBody"></tbody>
+      </table>
+      <div class="empty" id="logEmpty">Nenhuma leitura ainda.</div>
+    </div>
+    <div class="row2" style="margin-top:14px">
+      <button class="btn secondary col" id="exportBtn">Exportar / Compartilhar</button>
+      <button class="btn ghost col" id="clearLogBtn">Limpar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Tesseract.js via CDN (jsDelivr). Único worker persistente é criado em JS. -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   PREÇO EM SUOR — app de 1 arquivo. Vanilla JS. OCR 100% local (Tesseract.js).
+   Nenhuma imagem sai do aparelho.
+   ════════════════════════════════════════════════════════════════════════ */
+(() => {
+  'use strict';
+
+  /* ╔══════════════════ AJUSTES FINOS (CONFIG) ══════════════════╗
+     Mexa só aqui para calibrar o comportamento do app.            */
+  const CONFIG = {
+    HORAS_MES_DEFAULT : 220,    // jornada CLT padrão (horas/mês)
+    LOG_CAP           : 200,    // máximo de entradas no histórico
+    OCR_INTERVAL      : 600,    // throttle entre leituras (ms)
+    RESULT_HOLD_MS    : 4500,   // tempo nítido do resultado
+    RESULT_FADE_MS    : 1500,   // duração do fade-out (HOLD+FADE ≈ 6s no total)
+    DEDUP_WINDOW_MS   : 10000,  // janela p/ não duplicar a mesma leitura no log
+    MULTILINE         : true,   // ler vários preços empilhados (1 por linha)
+    MAX_LINES         : 6,      // teto de preços exibidos ao mesmo tempo
+    MAX_PLAUSIBLE     : 1000000 // acima disso é ruído de OCR
+  };
+  /* ╚═════════════════════════════════════════════════════════════╝ */
+  const LS = { salary:'pes_salary', hours:'pes_hours', log:'pes_log', mode:'pes_mode', country:'pes_country' };
+  const HORAS_MES_DEFAULT = CONFIG.HORAS_MES_DEFAULT;
+  const LOG_CAP           = CONFIG.LOG_CAP;
+  const OCR_INTERVAL      = CONFIG.OCR_INTERVAL;
+  const RESULT_HOLD_MS    = CONFIG.RESULT_HOLD_MS;
+  const RESULT_FADE_MS    = CONFIG.RESULT_FADE_MS;
+  const DEDUP_WINDOW_MS   = CONFIG.DEDUP_WINDOW_MS;
+  const MAX_PLAUSIBLE     = CONFIG.MAX_PLAUSIBLE;
+
+  /* ───────── Estado ───────── */
+  let salary = parseFloat(localStorage.getItem(LS.salary)) || 0;
+  let horasMes = parseFloat(localStorage.getItem(LS.hours)) || HORAS_MES_DEFAULT;
+  let logEntries = loadLog();
+  // base = 'custom' (salário próprio) ou 'country' (salário mínimo de um país)
+  let baseMode = localStorage.getItem(LS.mode) || 'custom';
+  let countryCode = localStorage.getItem(LS.country) || 'BR';
+  let economias = null;     // dados de países (economias.json ou fallback)
+
+  // Fallback embutido: garante o modo "país" mesmo se economias.json falhar ao carregar.
+  // O arquivo economias.json (atualizado pelo cron) tem precedência quando disponível.
+  const ECONOMIAS_FALLBACK = {"moedaBase":"BRL","paises":[
+    {"codigo":"BR","nome":"Brasil","bandeira":"🇧🇷","moeda":"BRL","simbolo":"R$","salarioMinimoMensal":1518,"cotacaoBRL":1.0},
+    {"codigo":"US","nome":"Estados Unidos","bandeira":"🇺🇸","moeda":"USD","simbolo":"US$","salarioMinimoMensal":1257,"cotacaoBRL":5.40},
+    {"codigo":"CN","nome":"China","bandeira":"🇨🇳","moeda":"CNY","simbolo":"¥","salarioMinimoMensal":2690,"cotacaoBRL":0.75},
+    {"codigo":"DE","nome":"Alemanha","bandeira":"🇩🇪","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2222,"cotacaoBRL":6.10},
+    {"codigo":"JP","nome":"Japão","bandeira":"🇯🇵","moeda":"JPY","simbolo":"¥","salarioMinimoMensal":183000,"cotacaoBRL":0.037},
+    {"codigo":"IN","nome":"Índia","bandeira":"🇮🇳","moeda":"INR","simbolo":"₹","salarioMinimoMensal":9750,"cotacaoBRL":0.064},
+    {"codigo":"GB","nome":"Reino Unido","bandeira":"🇬🇧","moeda":"GBP","simbolo":"£","salarioMinimoMensal":2117,"cotacaoBRL":7.10},
+    {"codigo":"FR","nome":"França","bandeira":"🇫🇷","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1802,"cotacaoBRL":6.10},
+    {"codigo":"IT","nome":"Itália","bandeira":"🇮🇹","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1300,"cotacaoBRL":6.10},
+    {"codigo":"CA","nome":"Canadá","bandeira":"🇨🇦","moeda":"CAD","simbolo":"C$","salarioMinimoMensal":2998,"cotacaoBRL":3.95},
+    {"codigo":"RU","nome":"Rússia","bandeira":"🇷🇺","moeda":"RUB","simbolo":"₽","salarioMinimoMensal":22440,"cotacaoBRL":0.068},
+    {"codigo":"MX","nome":"México","bandeira":"🇲🇽","moeda":"MXN","simbolo":"MX$","salarioMinimoMensal":8476,"cotacaoBRL":0.29},
+    {"codigo":"AU","nome":"Austrália","bandeira":"🇦🇺","moeda":"AUD","simbolo":"A$","salarioMinimoMensal":3966,"cotacaoBRL":3.60},
+    {"codigo":"KR","nome":"Coreia do Sul","bandeira":"🇰🇷","moeda":"KRW","simbolo":"₩","salarioMinimoMensal":2096270,"cotacaoBRL":0.0040},
+    {"codigo":"ES","nome":"Espanha","bandeira":"🇪🇸","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1184,"cotacaoBRL":6.10},
+    {"codigo":"ID","nome":"Indonésia","bandeira":"🇮🇩","moeda":"IDR","simbolo":"Rp","salarioMinimoMensal":5067381,"cotacaoBRL":0.00033},
+    {"codigo":"NL","nome":"Países Baixos","bandeira":"🇳🇱","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2335,"cotacaoBRL":6.10},
+    {"codigo":"TR","nome":"Turquia","bandeira":"🇹🇷","moeda":"TRY","simbolo":"₺","salarioMinimoMensal":26005,"cotacaoBRL":0.14},
+    {"codigo":"SA","nome":"Arábia Saudita","bandeira":"🇸🇦","moeda":"SAR","simbolo":"﷼","salarioMinimoMensal":4000,"cotacaoBRL":1.44},
+    {"codigo":"CH","nome":"Suíça","bandeira":"🇨🇭","moeda":"CHF","simbolo":"CHF","salarioMinimoMensal":4426,"cotacaoBRL":6.70}
+  ]};
+
+  let stream = null;                      // MediaStream da câmera
+  let worker = null;                      // worker único do Tesseract
+  let workerReady = false;
+  let scanning = false;                   // loop de OCR ativo?
+  let ocrBusy = false;                    // já existe uma leitura em andamento?
+  let lastTick = 0;
+  let resultActive = false;               // exibindo resultado (pausa o scan)
+  let recentLogs = [];                    // [{val,ts}] p/ dedup do log
+  let rafId = null;
+
+  /* ───────── Elementos ───────── */
+  const $ = id => document.getElementById(id);
+  const setupScreen=$('setupScreen'), camScreen=$('camScreen');
+  const video=$('video'), overlay=$('overlay'), octx=overlay.getContext('2d');
+  const startGate=$('startGate'), camError=$('camError');
+  const scanHint=$('scanHint');
+
+  // canvases reutilizáveis (não recriar por frame → sem vazamento)
+  const roiCanvas = document.createElement('canvas');   // recorte colorido p/ amostra de cor
+  const roiCtx = roiCanvas.getContext('2d', { willReadFrequently:true });
+  const ocrCanvas = document.createElement('canvas');   // versão pré-processada p/ OCR
+  const ocrCtx = ocrCanvas.getContext('2d', { willReadFrequently:true });
+
+  /* ════════════════════════════════════════════════════════════
+     UTILIDADES — parse/format BR
+     ════════════════════════════════════════════════════════════ */
+
+  // Converte "1.299,90" / "29,90" / "R$29,90" / "2990" → Number
+  function parseBR(str){
+    if(str==null) return NaN;
+    let s = (''+str).replace(/[R$\s]/g,'');
+    if(!s) return NaN;
+    if(s.includes(',')){                    // vírgula é o decimal BR
+      s = s.replace(/\./g,'').replace(',', '.');
+    } else if((s.match(/\./g)||[]).length>1){ // múltiplos pontos = milhar
+      s = s.replace(/\./g,'');
+    }
+    const n = parseFloat(s);
+    return isNaN(n)?NaN:n;
+  }
+
+  function formatBRL(n){
+    return 'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+
+  /* Formata duração no MENOR formato possível:
+     <1min → s | <1h → min | <1dia → h+min | <semana → dias | senão semanas */
+  function formatDuration(hoursDec){
+    const totalSec = hoursDec*3600;
+    if(totalSec < 60)  return Math.max(1,Math.round(totalSec))+'s';
+    if(totalSec < 3600){                       // < 1 hora → minutos
+      const m=Math.floor(totalSec/60), s=Math.round(totalSec%60);
+      return s>0 ? `${m}min ${s}s` : `${m}min`;
+    }
+    if(hoursDec < 24){                         // < 1 dia → horas + min
+      const h=Math.floor(hoursDec), m=Math.round((hoursDec-h)*60);
+      return m>0 ? `${h}h ${m}min` : `${h}h`;
+    }
+    const days = hoursDec/24;
+    if(days < 7){                              // < 1 semana → dias + horas
+      const d=Math.floor(days), h=Math.round((days-d)*24);
+      return h>0 ? `${d}d ${h}h` : `${d}d`;
+    }
+    const weeks = days/7;                      // semanas + dias
+    const w=Math.floor(weeks), d=Math.round((weeks-w)*7);
+    return d>0 ? `${w}sem ${d}d` : `${w}sem`;
+  }
+
+  function nowHM(){
+    const d=new Date();
+    return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }
+
+  // país atualmente selecionado (no modo "country")
+  function paisAtual(){ return economias ? economias.paises.find(p=>p.codigo===countryCode) : null; }
+
+  // salário mensal convertido para BRL (próprio, ou mínimo do país × cotação)
+  function salarioMensalBRL(){
+    if(baseMode==='country'){
+      const p=paisAtual();
+      return (p && p.cotacaoBRL>0) ? p.salarioMinimoMensal*p.cotacaoBRL : 0;
+    }
+    return salary>0 ? salary : 0;
+  }
+  // valor da hora SEMPRE em BRL (o preço lido também é em BRL) → evidencia a diferença
+  function valorHora(){
+    const h = horasMes>0 ? horasMes : HORAS_MES_DEFAULT;
+    const s = salarioMensalBRL();
+    return s>0 ? s/h : 0;
+  }
+  function baseReady(){ return salarioMensalBRL()>0; }
+
+  /* ════════════════════════════════════════════════════════════
+     PARSE DE PREÇO a partir do texto do OCR
+     ════════════════════════════════════════════════════════════ */
+  // Extrai TODOS os preços plausíveis de um texto (pode haver mais de um por linha).
+  function extractAllPrices(text){
+    if(!text) return [];
+    const clean = text.replace(/[^\d.,]/g,' ').replace(/\s+/g,' ').trim();
+    const tokens = clean.match(/\d[\d.,]*/g) || [];
+    const vals=[];
+    for(const tk of tokens){
+      let val=null;
+      if(/[.,]\d{2}(?!\d)/.test(tk))           val=parseBR(tk);                        // tem centavos (,dd)
+      else if(/^\d{1,3}(\.\d{3})+$/.test(tk))  val=parseInt(tk.replace(/\./g,''),10);  // milhar sem centavos: 1.299
+      else if(/^\d{3,}$/.test(tk))             val=parseInt(tk,10)/100;                // inteiro longo → 2 casas (2990→29,90)
+      else continue;                                                                   // ignora inteiros curtos (ruído)
+      if(val==null||isNaN(val)||val<=0||val>MAX_PLAUSIBLE) continue;
+      vals.push(val);
+    }
+    return vals;
+  }
+  // Conveniência: o maior preço plausível de um trecho (ex.: 1 palavra/linha).
+  function extractPrice(text){
+    const vals=extractAllPrices(text);
+    return vals.length ? Math.max(...vals) : null;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     CORES — amostragem (mini k-means k=2) + contraste WCAG
+     ════════════════════════════════════════════════════════════ */
+  // Luminância relativa WCAG (sRGB → linear)
+  function relLum(r,g,b){
+    const f=c=>{c/=255; return c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4);};
+    return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);
+  }
+  function contrastRatio(c1,c2){
+    const L1=relLum(...c1), L2=relLum(...c2);
+    const hi=Math.max(L1,L2), lo=Math.min(L1,L2);
+    return (hi+0.05)/(lo+0.05);
+  }
+  function rgbCss(c){ return `rgb(${c[0]|0},${c[1]|0},${c[2]|0})`; }
+
+  // k-means k=2 sobre os pixels (opcionalmente só dentro de `region` da imagem)
+  function dominantColors(imgData, region){
+    const W=imgData.width, H=imgData.height, d=imgData.data;
+    const x0=Math.max(0, Math.floor(region?region.x0:0));
+    const y0=Math.max(0, Math.floor(region?region.y0:0));
+    const x1=Math.min(W, Math.ceil(region?region.x1:W));
+    const y1=Math.min(H, Math.ceil(region?region.y1:H));
+    const cols=Math.max(1,x1-x0), rows=Math.max(1,y1-y0);
+    const stepX=Math.max(1, Math.floor(cols/60));   // amostra ~60x60 px
+    const stepY=Math.max(1, Math.floor(rows/60));
+    // sementes: claro e escuro
+    let cA=[40,40,40], cB=[220,220,220];
+    for(let it=0; it<6; it++){
+      let sA=[0,0,0], nA=0, sB=[0,0,0], nB=0;
+      for(let yy=y0; yy<y1; yy+=stepY){
+        for(let xx=x0; xx<x1; xx+=stepX){
+          const p=(yy*W+xx)*4, r=d[p], g=d[p+1], b=d[p+2];
+          const dA=(r-cA[0])**2+(g-cA[1])**2+(b-cA[2])**2;
+          const dB=(r-cB[0])**2+(g-cB[1])**2+(b-cB[2])**2;
+          if(dA<=dB){sA[0]+=r;sA[1]+=g;sA[2]+=b;nA++;}
+          else{sB[0]+=r;sB[1]+=g;sB[2]+=b;nB++;}
+        }
+      }
+      if(nA){cA=[sA[0]/nA,sA[1]/nA,sA[2]/nA];}
+      if(nB){cB=[sB[0]/nB,sB[1]/nB,sB[2]/nB];}
+      cA._n=nA; cB._n=nB;
+    }
+    // a cor mais frequente é o fundo; a outra é o texto
+    let bg,fg;
+    if((cA._n||0)>=(cB._n||0)){bg=cA;fg=cB;} else {bg=cB;fg=cA;}
+    bg=[bg[0],bg[1],bg[2]]; fg=[fg[0],fg[1],fg[2]];
+    // garante contraste mínimo 4.5:1 (WCAG AA)
+    if(contrastRatio(bg,fg) < 4.5){
+      const white=[255,255,255], black=[0,0,0];
+      fg = contrastRatio(bg,white) >= contrastRatio(bg,black) ? white : black;
+    }
+    return { bg, fg };
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     GEOMETRIA DA MIRA (ROI) — mapeia o alvo desenhado → pixels do vídeo
+     considerando object-fit:cover
+     ════════════════════════════════════════════════════════════ */
+  function targetRectScreen(){
+    // alvo centralizado, mais largo que alto (etiqueta). 82% da largura, razão ~2.9:1
+    const W=overlay.width, H=overlay.height;
+    const tw=Math.min(W*0.82, 560*dpr());
+    const th=tw/2.9;
+    return { x:(W-tw)/2, y:(H-th)/2, w:tw, h:th };
+  }
+  function dpr(){ return window.devicePixelRatio||1; }
+
+  // Converte retângulo de tela (canvas px) → retângulo em pixels reais do vídeo
+  function screenRectToVideo(rect){
+    const vw=video.videoWidth, vh=video.videoHeight;
+    const dw=overlay.width, dh=overlay.height;           // canvas casa com a tela (em device px)
+    if(!vw||!vh) return null;
+    const scale=Math.max(dw/vw, dh/vh);                  // object-fit:cover usa max
+    const offX=(dw - vw*scale)/2;                        // recorte horizontal (≤0)
+    const offY=(dh - vh*scale)/2;
+    return {
+      x:(rect.x-offX)/scale, y:(rect.y-offY)/scale,
+      w:rect.w/scale,        h:rect.h/scale
+    };
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     DESENHO DO OVERLAY (mira + resultado)
+     ════════════════════════════════════════════════════════════ */
+  let resultBox = null;        // { items:[{bg,fg,big,small,yTop,yBot}], startTs }
+  function resizeOverlay(){
+    overlay.width = Math.round(window.innerWidth*dpr());
+    overlay.height= Math.round(window.innerHeight*dpr());
+  }
+
+  function drawTarget(rect){
+    const {x,y,w,h}=rect;
+    octx.save();
+    // escurece fora da mira
+    octx.fillStyle='rgba(0,0,0,0.35)';
+    octx.beginPath();
+    octx.rect(0,0,overlay.width,overlay.height);
+    octx.rect(x,y,w,h); // buraco
+    octx.fill('evenodd');
+    // cantos
+    const c=Math.min(w,h)*0.22, lw=Math.max(3,3*dpr());
+    octx.strokeStyle=resultActive?'rgba(230,57,70,.95)':'rgba(255,255,255,.92)';
+    octx.lineWidth=lw; octx.lineCap='round';
+    const corners=[[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]];
+    for(const [cx,cy,sx,sy] of corners){
+      octx.beginPath();
+      octx.moveTo(cx, cy+sy*c); octx.lineTo(cx,cy); octx.lineTo(cx+sx*c, cy);
+      octx.stroke();
+    }
+    octx.restore();
+  }
+
+  function drawResult(rect){
+    if(!resultBox || !resultBox.items.length) return;
+    const elapsed = performance.now()-resultBox.startTs;
+    let alpha=1;
+    if(elapsed > RESULT_HOLD_MS){
+      alpha = 1 - Math.min(1,(elapsed-RESULT_HOLD_MS)/RESULT_FADE_MS);
+    }
+    if(alpha<=0){ resultBox=null; resultActive=false; return; }
+
+    const {x,y,w,h}=rect;
+    octx.save();
+    octx.textAlign='center'; octx.textBaseline='middle';
+
+    // Cada preço vira um bloco posicionado sobre o SEU retângulo na etiqueta.
+    // Isso cobre tanto preços empilhados (y diferente) quanto lado a lado (x diferente).
+    const items=resultBox.items;
+    const single=items.length===1;
+    const showSmall=items.length<=3;       // com poucos preços, mostra também o R$
+    for(const it of items){
+      // centro e tamanho do preço (em px de tela) dentro da mira
+      const pcx=x+((it.fx0+it.fx1)/2)*w;
+      const pcy=y+((it.fy0+it.fy1)/2)*h;
+      const ph=Math.max((it.fy1-it.fy0)*h, 0);
+
+      // altura do bloco: acompanha o preço, com limites legíveis
+      const bh=single ? h*0.40 : Math.min(h*0.46, Math.max(ph*1.9, h*0.18));
+      // tamanho de fonte do tempo a partir da altura do bloco
+      const fs=Math.floor(bh*(showSmall?0.44:0.6));
+      octx.font=`800 ${fs}px system-ui,-apple-system,sans-serif`;
+      let needW=octx.measureText(it.big).width;
+      if(showSmall){
+        octx.font=`600 ${Math.floor(bh*0.26)}px system-ui,-apple-system,sans-serif`;
+        needW=Math.max(needW, octx.measureText(it.small).width);
+      }
+      // largura do bloco: cabe o texto, sem estourar a mira
+      let bw=Math.min(w, needW + fs*0.8);
+      // posição centralizada no preço, presa dentro da ROI
+      const bx=Math.min(Math.max(pcx-bw/2, x), x+w-bw);
+      const by=Math.min(Math.max(pcy-bh/2, y), y+h-bh);
+
+      // bloco com a cor de fundo amostrada do próprio preço
+      octx.globalAlpha=alpha;
+      roundRect(bx,by,bw,bh, Math.min(12*dpr(), bh*0.28));
+      octx.fillStyle=rgbCss(it.bg);
+      octx.fill();
+      // texto com a cor amostrada (contraste WCAG garantido)
+      octx.fillStyle=rgbCss(it.fg);
+      const innerW=bw-fs*0.5;
+      if(showSmall){
+        fitFont(it.big, innerW, Math.floor(bh*0.44), '800');
+        octx.globalAlpha=alpha;
+        octx.fillText(it.big, bx+bw/2, by+bh*0.38);
+        fitFont(it.small, innerW, Math.floor(bh*0.26), '600');
+        octx.globalAlpha=alpha*0.85;
+        octx.fillText(it.small, bx+bw/2, by+bh*0.74);
+      } else {
+        fitFont(it.big, innerW, Math.floor(bh*0.6), '800');
+        octx.globalAlpha=alpha;
+        octx.fillText(it.big, bx+bw/2, by+bh*0.55);
+      }
+    }
+    octx.restore();
+  }
+
+  // reduz o tamanho da fonte até o texto caber em maxW
+  function fitFont(text, maxW, startPx, weight){
+    let px=Math.max(10, startPx);
+    octx.font=`${weight} ${px}px system-ui,-apple-system,sans-serif`;
+    while(octx.measureText(text).width > maxW && px>10){
+      px-=1; octx.font=`${weight} ${px}px system-ui,-apple-system,sans-serif`;
+    }
+    return px;
+  }
+
+  function roundRect(x,y,w,h,r){
+    octx.beginPath();
+    octx.moveTo(x+r,y);
+    octx.arcTo(x+w,y,x+w,y+h,r);
+    octx.arcTo(x+w,y+h,x,y+h,r);
+    octx.arcTo(x,y+h,x,y,r);
+    octx.arcTo(x,y,x+w,y,r);
+    octx.closePath();
+  }
+
+  // loop de render (separado do loop de OCR)
+  function renderLoop(){
+    rafId=requestAnimationFrame(renderLoop);
+    if(camScreen.classList.contains('active')===false) return;
+    octx.clearRect(0,0,overlay.width,overlay.height);
+    const rect=targetRectScreen();
+    drawTarget(rect);
+    if(resultBox) drawResult(rect);
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     CAPTURA DA ROI + PRÉ-PROCESSAMENTO
+     ════════════════════════════════════════════════════════════ */
+  function captureROI(){
+    const rect=targetRectScreen();
+    const vrect=screenRectToVideo(rect);
+    if(!vrect||vrect.w<8||vrect.h<8) return null;
+
+    // 2x upscale p/ ajudar dígitos pequenos
+    const outW=Math.round(rect.w*2/dpr());
+    const outH=Math.round(rect.h*2/dpr());
+    roiCanvas.width=outW; roiCanvas.height=outH;
+    // recorta exatamente a área da mira do frame do vídeo
+    roiCtx.drawImage(video, vrect.x,vrect.y,vrect.w,vrect.h, 0,0,outW,outH);
+
+    // amostra de cor a partir do recorte COLORIDO (antes de binarizar)
+    let colorData;
+    try{ colorData = roiCtx.getImageData(0,0,outW,outH); }catch(e){ return null; }
+
+    // pré-processa p/ OCR: cinza + stretch de contraste (em canvas separado)
+    ocrCanvas.width=outW; ocrCanvas.height=outH;
+    const img=ocrCtx.createImageData(outW,outH);
+    const src=colorData.data, dst=img.data;
+    let mn=255,mx=0;
+    const gray=new Uint8ClampedArray(outW*outH);
+    for(let i=0,j=0;i<src.length;i+=4,j++){
+      const y=(src[i]*0.299+src[i+1]*0.587+src[i+2]*0.114)|0;
+      gray[j]=y; if(y<mn)mn=y; if(y>mx)mx=y;
+    }
+    const range=Math.max(1,mx-mn);
+    for(let j=0,i=0;j<gray.length;j++,i+=4){
+      let v=( (gray[j]-mn)*255/range )|0;       // stretch linear de contraste
+      dst[i]=dst[i+1]=dst[i+2]=v; dst[i+3]=255;
+    }
+    ocrCtx.putImageData(img,0,0);
+    return { colorData, outW, outH };
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     OCR — worker único + loop de leitura
+     ════════════════════════════════════════════════════════════ */
+  async function initWorker(){
+    if(worker) return;
+    try{
+      // idioma 'eng': reconhece dígitos com alta confiabilidade e traineddata menor/rápido.
+      // (dígitos e símbolos de preço não dependem de léxico português.)
+      worker = await Tesseract.createWorker('eng', 1, {
+        // os assets (core/lang) vêm do mesmo CDN — nada da imagem é enviado
+      });
+      await worker.setParameters({
+        tessedit_char_whitelist:'0123456789R$,. ',
+        tessedit_pageseg_mode:'6'        // PSM 6: bloco uniforme → lê várias linhas de preço
+      });
+      workerReady=true;
+    }catch(e){
+      console.error('Falha ao iniciar OCR', e);
+      showToast('Falha ao carregar OCR. Verifique a conexão.');
+    }
+  }
+
+  async function ocrTick(){
+    if(!scanning || resultActive || ocrBusy || !workerReady) return;
+    const now=performance.now();
+    if(now-lastTick < OCR_INTERVAL) return;
+    lastTick=now;
+    ocrBusy=true;
+    try{
+      const cap=captureROI();
+      if(!cap){ ocrBusy=false; return; }
+      // pede a árvore estruturada (blocks/words) p/ ter o bbox de cada preço
+      const { data } = await worker.recognize(ocrCanvas, {}, { blocks:true, text:true });
+      // SEM consenso: assim que ler, já mostra. Cobre preços empilhados E lado a lado.
+      let prices=pricesFromData(data, cap.outW, cap.outH);
+      if(!CONFIG.MULTILINE && prices.length>1){
+        prices=[prices.reduce((a,b)=>b.price>a.price?b:a)];   // só o maior
+      }
+      if(prices.length){
+        prices=prices.slice(0, CONFIG.MAX_LINES);
+        confirmPrices(prices, cap.colorData, cap.outW, cap.outH);
+      }
+    }catch(e){
+      // ignora erros pontuais de frame
+    }finally{
+      ocrBusy=false;
+    }
+  }
+
+  // Reúne todas as "palavras" do OCR, seja qual for o formato da árvore (varia entre versões).
+  function collectWords(data){
+    if(!data) return [];
+    if(data.words && data.words.length) return data.words;
+    const ws=[];
+    for(const ln of (data.lines||[])) if(ln.words) ws.push(...ln.words);
+    if(ws.length) return ws;
+    for(const bl of (data.blocks||[]))
+      for(const pa of (bl.paragraphs||[]))
+        for(const ln of (pa.lines||[])) if(ln.words) ws.push(...ln.words);
+    return ws;
+  }
+
+  // remove preços duplicados muito próximos (mesmo valor + mesma posição)
+  function dedupItems(items){
+    const out=[];
+    for(const it of items){
+      const cx=(it.x0+it.x1)/2, cy=(it.y0+it.y1)/2;
+      if(out.some(o=>o.price===it.price &&
+          Math.abs((o.x0+o.x1)/2-cx)<10 && Math.abs((o.y0+o.y1)/2-cy)<10)) continue;
+      out.push(it);
+    }
+    return out;
+  }
+
+  // Extrai preços com a posição (bbox) de CADA um → cobre layout vertical e horizontal.
+  function pricesFromData(data, outW, outH){
+    let out=[];
+    // 1) caminho preferido: por palavra (cada preço ganha seu retângulo x/y real)
+    for(const w of collectWords(data)){
+      const txt=w.text||'';
+      // só consideramos a palavra se ela "parece" um preço (centavos ou número grande)
+      if(!/[.,]\d{2}|\d{3,}/.test(txt)) continue;
+      const price=extractPrice(txt);
+      if(price==null) continue;
+      const b=w.bbox||{x0:0,y0:0,x1:outW,y1:outH};
+      out.push({ price, x0:b.x0, y0:b.y0, x1:b.x1, y1:b.y1 });
+    }
+    // 2) fallback por linha de texto (sem bbox): distribui em linhas e colunas
+    if(!out.length && data && data.text){
+      const tl=data.text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const n=tl.length||1;
+      tl.forEach((t,i)=>{
+        const vals=extractAllPrices(t);
+        const k=vals.length||1;
+        vals.forEach((p,j)=>{
+          out.push({ price:p,
+            x0:(j/k)*outW, x1:((j+1)/k)*outW,
+            y0:(i/n)*outH, y1:((i+1)/n)*outH });
+        });
+      });
+    }
+    return dedupItems(out);
+  }
+
+  // confirma 1..N preços, monta os blocos de resultado e registra no log
+  function confirmPrices(prices, colorData, outW, outH){
+    const vh=valorHora();
+    if(vh<=0){ openBase(true); return; }
+    const items=[]; const t=Date.now();
+    for(const pr of prices){
+      const horasDec=pr.price/vh;
+      const durFmt=formatDuration(horasDec);
+      const priceFmt=formatBRL(pr.price);
+      // amostra a cor da região do próprio preço (com leve folga ao redor)
+      const padX=(pr.x1-pr.x0)*0.15+4, padY=(pr.y1-pr.y0)*0.3+4;
+      const region={ x0:pr.x0-padX, y0:pr.y0-padY, x1:pr.x1+padX, y1:pr.y1+padY };
+      const {bg,fg}=dominantColors(colorData, region);
+      // guarda o retângulo do preço em FRAÇÕES da ROI (0..1) p/ posicionar o bloco
+      items.push({ bg,fg, big:durFmt, small:priceFmt,
+        fx0:pr.x0/outW, fy0:pr.y0/outH, fx1:pr.x1/outW, fy1:pr.y1/outH });
+      // log com dedup por valor dentro da janela
+      if(!recentlyLogged(pr.price, t)){
+        addLog({ ts:t, time:nowHM(), precoLido:pr.price, precoFmt:priceFmt,
+                 horasDecimais:horasDec, horasFmt:durFmt });
+        recentLogs.push({ val:pr.price, ts:t });
+      }
+    }
+    if(!items.length) return;
+    items.sort((a,b)=> (a.fy0-b.fy0) || (a.fx0-b.fx0));   // de cima p/ baixo, depois esq→dir
+    resultBox={ items, startTs:performance.now(), loggedTs:t };  // loggedTs p/ desfazer no toque
+    resultActive=true;
+    scanHint.style.opacity='0';
+
+    // ao fim do HOLD (início do fade) retoma a leitura em background
+    setTimeout(()=>{
+      resultActive=false;
+      scanHint.style.opacity='';
+    }, RESULT_HOLD_MS);
+  }
+
+  // dedup do log: já registramos este valor há menos de DEDUP_WINDOW_MS?
+  function recentlyLogged(val, t){
+    recentLogs=recentLogs.filter(r=>t-r.ts < DEDUP_WINDOW_MS);
+    return recentLogs.some(r=>r.val===val);
+  }
+
+  // Toque na tela/preço: descarta a leitura atual e reinicia o scan (caso tenha lido errado).
+  function clearCurrentResult(fromTap){
+    if(resultBox && fromTap && resultBox.loggedTs){
+      const ts=resultBox.loggedTs;
+      const before=logEntries.length;
+      logEntries=logEntries.filter(e=>e.ts!==ts);     // remove o que foi logado nesta leitura
+      if(logEntries.length!==before){ saveLog(); renderLog(); }
+      recentLogs=recentLogs.filter(r=>r.ts!==ts);      // libera reler o mesmo valor imediatamente
+    }
+    resultBox=null;
+    resultActive=false;                                // retoma o loop de OCR na hora
+    scanHint.style.opacity='';
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     LOOP PRINCIPAL DO SCAN
+     ════════════════════════════════════════════════════════════ */
+  function scanPump(){
+    if(!scanning) return;
+    ocrTick();                       // respeita o throttle internamente
+    setTimeout(scanPump, 120);       // pump leve; ocrTick decide quando rodar
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     CÂMERA
+     ════════════════════════════════════════════════════════════ */
+  async function startCamera(){
+    camError.classList.remove('show');
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({
+        video:{ facingMode:{ ideal:'environment' },
+                width:{ ideal:1920 }, height:{ ideal:1080 } },
+        audio:false
+      });
+      video.srcObject=stream;
+      await video.play().catch(()=>{});
+      // tenta foco contínuo se suportado
+      try{
+        const track=stream.getVideoTracks()[0];
+        const caps=track.getCapabilities?track.getCapabilities():{};
+        if(caps.focusMode && caps.focusMode.includes('continuous')){
+          await track.applyConstraints({ advanced:[{ focusMode:'continuous' }] });
+        }
+      }catch(e){}
+      startGate.classList.add('hide');
+      resizeOverlay();
+      // inicia OCR e loop
+      await initWorker();
+      scanning=true; scanPump();
+    }catch(err){
+      handleCamError(err);
+    }
+  }
+
+  function handleCamError(err){
+    startGate.classList.add('hide');
+    camError.classList.add('show');
+    const t=$('camErrTitle'), m=$('camErrMsg');
+    if(err && err.name==='NotAllowedError'){
+      t.textContent='Permissão negada';
+      m.textContent='Você precisa autorizar o acesso à câmera nas configurações do navegador para usar o scanner.';
+    }else if(err && err.name==='NotFoundError'){
+      t.textContent='Câmera não encontrada';
+      m.textContent='Nenhuma câmera traseira foi detectada neste dispositivo.';
+    }else{
+      t.textContent='Câmera indisponível';
+      m.textContent='Não foi possível acessar a câmera. Verifique se o site está em HTTPS e tente novamente.';
+    }
+    console.error(err);
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     LOG / HISTÓRICO
+     ════════════════════════════════════════════════════════════ */
+  function loadLog(){
+    try{ return JSON.parse(localStorage.getItem(LS.log))||[]; }catch(e){ return []; }
+  }
+  function saveLog(){ localStorage.setItem(LS.log, JSON.stringify(logEntries)); }
+  function addLog(entry){
+    logEntries.unshift(entry);
+    if(logEntries.length>LOG_CAP) logEntries.length=LOG_CAP;
+    saveLog();
+    renderLog();
+  }
+  function renderLog(){
+    const body=$('logBody'); body.innerHTML='';
+    $('logEmpty').style.display = logEntries.length? 'none':'block';
+    for(const e of logEntries){
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="t">${e.time}</td><td class="p">${e.precoFmt}</td><td class="h">${e.horasFmt}</td>`;
+      body.appendChild(tr);
+    }
+  }
+
+  function exportLog(){
+    if(!logEntries.length){ showToast('Nada para exportar.'); return; }
+    // texto puro, linha por linha
+    const lines = logEntries.map(e=>`${e.time} | ${e.precoFmt} | ${e.horasFmt}`);
+    const text = 'Quanto eu tenho que me foder — histórico\n'+lines.join('\n');
+    if(navigator.share){
+      navigator.share({ text }).catch(()=>{});
+    }else if(navigator.clipboard){
+      navigator.clipboard.writeText(text)
+        .then(()=>showToast('Copiado para a área de transferência'))
+        .catch(()=>downloadTxt(text));
+    }else{
+      downloadTxt(text);
+    }
+  }
+  function downloadTxt(text){
+    const blob=new Blob([text],{type:'text/plain'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download='preco-em-suor.txt'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);   // revoga p/ não vazar
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     UI — telas, modais, toast
+     ════════════════════════════════════════════════════════════ */
+  function showScreen(el){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function openModal(id){ $(id).classList.add('active'); }
+  function closeModal(id){ $(id).classList.remove('active'); }
+  let toastTimer=null;
+  function showToast(msg){
+    const t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+  }
+
+  function openBase(force){
+    setSeg($('baseSeg'), baseMode);
+    showBaseBoxes(baseMode);
+    populateCountrySelect($('countrySelect2'));
+    $('salaryInput2').value = salary? salary.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '';
+    $('hoursInput2').value = horasMes;
+    updateRateHint();
+    openModal('baseModal');
+    if(force) showToast('Defina o valor base para calcular.');
+  }
+  function showBaseBoxes(mode){
+    $('customBox2').style.display = mode==='country'?'none':'block';
+    $('countryBox2').style.display = mode==='country'?'block':'none';
+  }
+  function updateRateHint(){
+    const mode=segMode($('baseSeg'));
+    const h=parseBR($('hoursInput2').value)||HORAS_MES_DEFAULT;
+    let s=0, extra='';
+    if(mode==='country'){
+      const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect2').value);
+      if(p){ s=p.salarioMinimoMensal*(p.cotacaoBRL||0);
+        extra=` (${p.bandeira} mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')} ≈ R$ ${Math.round(s).toLocaleString('pt-BR')}/mês)`; }
+    } else { s=parseBR($('salaryInput2').value); }
+    $('rateHint').textContent = (s>0 && h>0) ? `Valor da hora: ${formatBRL(s/h)}${extra}` : '';
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     PAÍSES — carrega economias.json (com fallback) e popula seletores
+     ════════════════════════════════════════════════════════════ */
+  async function loadEconomias(){
+    try{
+      const r=await fetch('economias.json',{cache:'no-store'});  // sempre a versão mais nova (cron)
+      if(r.ok){ const d=await r.json(); if(d && d.paises && d.paises.length){ economias=d; return; } }
+    }catch(e){}
+    economias=ECONOMIAS_FALLBACK;     // degrada para os dados embutidos
+  }
+  function populateCountrySelect(sel){
+    if(!sel || !economias) return;
+    if(sel.options.length!==economias.paises.length){
+      sel.innerHTML='';
+      for(const p of economias.paises){
+        const o=document.createElement('option');
+        o.value=p.codigo; o.textContent=`${p.bandeira}  ${p.nome}`;
+        sel.appendChild(o);
+      }
+    }
+    sel.value=countryCode;
+  }
+  function setSeg(segEl, mode){
+    segEl.querySelectorAll('.seg-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  }
+  function segMode(segEl){
+    const a=segEl.querySelector('.seg-btn.active');
+    return a? a.dataset.mode : 'custom';
+  }
+  function updateCountryHint(){
+    const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect').value);
+    if(!p){ $('countryHint').textContent=''; return; }
+    const h=parseBR($('hoursInput').value)||HORAS_MES_DEFAULT;
+    const brl=p.salarioMinimoMensal*(p.cotacaoBRL||0);
+    $('countryHint').textContent =
+      `Mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')}/mês ≈ R$ ${Math.round(brl).toLocaleString('pt-BR')} • R$ ${(brl/h).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}/h`;
+  }
+  // rótulo do botão "Valor base" na câmera (mostra bandeira no modo país)
+  function updateBaseChip(){
+    const el=$('baseBtnLabel'); if(!el) return;
+    if(baseMode==='country'){ const p=paisAtual(); el.textContent = p ? p.bandeira+' '+p.nome : 'País'; }
+    else el.textContent='Valor base';
+  }
+
+  function persistBase(){
+    localStorage.setItem(LS.mode, baseMode);
+    localStorage.setItem(LS.country, countryCode);
+    localStorage.setItem(LS.salary, salary);
+    localStorage.setItem(LS.hours, horasMes);
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     BOOTSTRAP / EVENTOS
+     ════════════════════════════════════════════════════════════ */
+  function validateSetup(){
+    const mode=segMode($('setupSeg'));
+    const ok = mode==='country' ? !!(economias && $('countrySelect').value)
+                                 : parseBR($('salaryInput').value)>0;
+    $('startBtn').disabled = !ok;
+  }
+  function showSetupBoxes(mode){
+    $('customBox').style.display = mode==='country'?'none':'block';
+    $('countryBox').style.display = mode==='country'?'block':'none';
+  }
+
+  function goToCamera(){
+    updateBaseChip();
+    showScreen(camScreen);
+    resizeOverlay();
+    if(!rafId) renderLoop();
+    // câmera só inicia após gesto (botão "Ligar câmera") — exigência iOS
+  }
+
+  async function init(){
+    await loadEconomias();
+
+    // ----- tela de setup -----
+    populateCountrySelect($('countrySelect'));
+    setSeg($('setupSeg'), baseMode);
+    showSetupBoxes(baseMode);
+    if(salary>0) $('salaryInput').value = salary.toLocaleString('pt-BR',{minimumFractionDigits:2});
+    $('hoursInput').value = horasMes;
+    updateCountryHint();
+    renderLog();
+
+    $('setupSeg').querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{
+      setSeg($('setupSeg'), b.dataset.mode); showSetupBoxes(b.dataset.mode);
+      updateCountryHint(); validateSetup();
+    }));
+    $('salaryInput').addEventListener('input', validateSetup);
+    $('countrySelect').addEventListener('change', ()=>{ countryCode=$('countrySelect').value; updateCountryHint(); validateSetup(); });
+    $('hoursInput').addEventListener('input', updateCountryHint);
+    validateSetup();
+
+    $('startBtn').addEventListener('click', ()=>{
+      const mode=segMode($('setupSeg'));
+      horasMes=parseBR($('hoursInput').value)||HORAS_MES_DEFAULT;
+      if(mode==='country'){
+        countryCode=$('countrySelect').value; baseMode='country';
+        if(!baseReady()){ showToast('Selecione um país válido.'); return; }
+      } else {
+        salary=parseBR($('salaryInput').value);
+        if(!(salary>0)) return;
+        baseMode='custom';
+      }
+      persistBase();
+      goToCamera();
+    });
+
+    $('enableCamBtn').addEventListener('click', startCamera);
+    $('retryCamBtn').addEventListener('click', startCamera);
+
+    // toque na tela (fora dos botões) descarta a leitura atual e reinicia o scan
+    camScreen.addEventListener('click', e=>{
+      if(e.target.closest('.topbar') || e.target.closest('#startGate') || e.target.closest('.camError')) return;
+      if(resultBox){ clearCurrentResult(true); showToast('Leitura descartada — lendo de novo'); }
+    });
+
+    $('baseBtn').addEventListener('click', ()=>openBase(false));
+    $('logBtn').addEventListener('click', ()=>{ renderLog(); openModal('logModal'); });
+
+    // ----- modal de valor base -----
+    $('baseSeg').querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{
+      setSeg($('baseSeg'), b.dataset.mode); showBaseBoxes(b.dataset.mode); updateRateHint();
+    }));
+    ['salaryInput2','hoursInput2'].forEach(id=>$(id).addEventListener('input', updateRateHint));
+    $('countrySelect2').addEventListener('change', updateRateHint);
+
+    $('saveBaseBtn').addEventListener('click', ()=>{
+      const mode=segMode($('baseSeg'));
+      const h=parseBR($('hoursInput2').value)||HORAS_MES_DEFAULT;
+      if(mode==='country'){
+        countryCode=$('countrySelect2').value; baseMode='country'; horasMes=h;
+        if(!baseReady()){ showToast('Selecione um país válido.'); return; }
+      } else {
+        const s=parseBR($('salaryInput2').value);
+        if(!(s>0)){ showToast('Informe um salário válido.'); return; }
+        salary=s; baseMode='custom'; horasMes=h;
+      }
+      persistBase();
+      updateBaseChip();
+      closeModal('baseModal');
+      showToast('Valor base atualizado.');
+    });
+
+    $('exportBtn').addEventListener('click', exportLog);
+    $('clearLogBtn').addEventListener('click', ()=>{
+      if(!logEntries.length) return;
+      logEntries=[]; saveLog(); renderLog(); showToast('Histórico limpo.');
+    });
+
+    document.querySelectorAll('[data-close]').forEach(b=>
+      b.addEventListener('click', ()=>closeModal(b.dataset.close)));
+    document.querySelectorAll('.modal').forEach(m=>
+      m.addEventListener('click', e=>{ if(e.target===m) closeModal(m.id); }));
+
+    window.addEventListener('resize', ()=>{ if(camScreen.classList.contains('active')) resizeOverlay(); });
+    window.addEventListener('orientationchange', ()=>setTimeout(resizeOverlay,300));
+
+    // decide tela inicial: já há base válida configurada?
+    if(baseReady()){ goToCamera(); } else { showScreen(setupScreen); }
+  }
+
+  // registra service worker (opcional, p/ instalável/offline) — falha silenciosa
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>

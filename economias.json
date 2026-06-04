@@ -1,0 +1,207 @@
+{
+  "atualizadoEm": "2026-06-04T20:13:48Z",
+  "moedaBase": "BRL",
+  "observacao": "Salários mínimos mensais APROXIMADOS (2024-2025), em moeda local. cotacaoBRL = quantos reais vale 1 unidade da moeda; atualizada pelo update-rates.sh (cron). Brasil + 20 maiores economias.",
+  "paises": [
+    {
+      "codigo": "BR",
+      "nome": "Brasil",
+      "bandeira": "🇧🇷",
+      "moeda": "BRL",
+      "simbolo": "R$",
+      "salarioMinimoMensal": 1518,
+      "cotacaoBRL": 1.0,
+      "obs": ""
+    },
+    {
+      "codigo": "US",
+      "nome": "Estados Unidos",
+      "bandeira": "🇺🇸",
+      "moeda": "USD",
+      "simbolo": "US$",
+      "salarioMinimoMensal": 1257,
+      "cotacaoBRL": 5.029953,
+      "obs": "Federal US$ 7,25/h"
+    },
+    {
+      "codigo": "CN",
+      "nome": "China",
+      "bandeira": "🇨🇳",
+      "moeda": "CNY",
+      "simbolo": "¥",
+      "salarioMinimoMensal": 2690,
+      "cotacaoBRL": 0.739645,
+      "obs": "Base Xangai (varia por província)"
+    },
+    {
+      "codigo": "DE",
+      "nome": "Alemanha",
+      "bandeira": "🇩🇪",
+      "moeda": "EUR",
+      "simbolo": "€",
+      "salarioMinimoMensal": 2222,
+      "cotacaoBRL": 5.852231,
+      "obs": "€ 12,82/h"
+    },
+    {
+      "codigo": "JP",
+      "nome": "Japão",
+      "bandeira": "🇯🇵",
+      "moeda": "JPY",
+      "simbolo": "¥",
+      "salarioMinimoMensal": 183000,
+      "cotacaoBRL": 0.031379,
+      "obs": "Média nacional"
+    },
+    {
+      "codigo": "IN",
+      "nome": "Índia",
+      "bandeira": "🇮🇳",
+      "moeda": "INR",
+      "simbolo": "₹",
+      "salarioMinimoMensal": 9750,
+      "cotacaoBRL": 0.052413,
+      "obs": "Varia muito por estado/setor"
+    },
+    {
+      "codigo": "GB",
+      "nome": "Reino Unido",
+      "bandeira": "🇬🇧",
+      "moeda": "GBP",
+      "simbolo": "£",
+      "salarioMinimoMensal": 2117,
+      "cotacaoBRL": 6.744134,
+      "obs": "National Living Wage £ 12,21/h"
+    },
+    {
+      "codigo": "FR",
+      "nome": "França",
+      "bandeira": "🇫🇷",
+      "moeda": "EUR",
+      "simbolo": "€",
+      "salarioMinimoMensal": 1802,
+      "cotacaoBRL": 5.852231,
+      "obs": "SMIC bruto"
+    },
+    {
+      "codigo": "IT",
+      "nome": "Itália",
+      "bandeira": "🇮🇹",
+      "moeda": "EUR",
+      "simbolo": "€",
+      "salarioMinimoMensal": 1300,
+      "cotacaoBRL": 5.852231,
+      "obs": "Sem mínimo legal nacional (estimativa por convenção)"
+    },
+    {
+      "codigo": "CA",
+      "nome": "Canadá",
+      "bandeira": "🇨🇦",
+      "moeda": "CAD",
+      "simbolo": "C$",
+      "salarioMinimoMensal": 2998,
+      "cotacaoBRL": 3.619752,
+      "obs": "Federal C$ 17,30/h"
+    },
+    {
+      "codigo": "RU",
+      "nome": "Rússia",
+      "bandeira": "🇷🇺",
+      "moeda": "RUB",
+      "simbolo": "₽",
+      "salarioMinimoMensal": 22440,
+      "cotacaoBRL": 0.068466,
+      "obs": ""
+    },
+    {
+      "codigo": "MX",
+      "nome": "México",
+      "bandeira": "🇲🇽",
+      "moeda": "MXN",
+      "simbolo": "MX$",
+      "salarioMinimoMensal": 8476,
+      "cotacaoBRL": 0.290945,
+      "obs": "Zona geral"
+    },
+    {
+      "codigo": "AU",
+      "nome": "Austrália",
+      "bandeira": "🇦🇺",
+      "moeda": "AUD",
+      "simbolo": "A$",
+      "salarioMinimoMensal": 3966,
+      "cotacaoBRL": 3.591631,
+      "obs": "A$ 24,10/h"
+    },
+    {
+      "codigo": "KR",
+      "nome": "Coreia do Sul",
+      "bandeira": "🇰🇷",
+      "moeda": "KRW",
+      "simbolo": "₩",
+      "salarioMinimoMensal": 2096270,
+      "cotacaoBRL": 0.003286,
+      "obs": "₩ 10.030/h"
+    },
+    {
+      "codigo": "ES",
+      "nome": "Espanha",
+      "bandeira": "🇪🇸",
+      "moeda": "EUR",
+      "simbolo": "€",
+      "salarioMinimoMensal": 1184,
+      "cotacaoBRL": 5.852231,
+      "obs": "SMI (14 pagamentos/ano)"
+    },
+    {
+      "codigo": "ID",
+      "nome": "Indonésia",
+      "bandeira": "🇮🇩",
+      "moeda": "IDR",
+      "simbolo": "Rp",
+      "salarioMinimoMensal": 5067381,
+      "cotacaoBRL": 0.00028,
+      "obs": "Base Jacarta (varia por província)"
+    },
+    {
+      "codigo": "NL",
+      "nome": "Países Baixos",
+      "bandeira": "🇳🇱",
+      "moeda": "EUR",
+      "simbolo": "€",
+      "salarioMinimoMensal": 2335,
+      "cotacaoBRL": 5.852231,
+      "obs": "€ 14,06/h"
+    },
+    {
+      "codigo": "TR",
+      "nome": "Turquia",
+      "bandeira": "🇹🇷",
+      "moeda": "TRY",
+      "simbolo": "₺",
+      "salarioMinimoMensal": 26005,
+      "cotacaoBRL": 0.109131,
+      "obs": "Bruto"
+    },
+    {
+      "codigo": "SA",
+      "nome": "Arábia Saudita",
+      "bandeira": "🇸🇦",
+      "moeda": "SAR",
+      "simbolo": "﷼",
+      "salarioMinimoMensal": 4000,
+      "cotacaoBRL": 1.341344,
+      "obs": "Para nacionais"
+    },
+    {
+      "codigo": "CH",
+      "nome": "Suíça",
+      "bandeira": "🇨🇭",
+      "moeda": "CHF",
+      "simbolo": "CHF",
+      "salarioMinimoMensal": 4426,
+      "cotacaoBRL": 6.354572,
+      "obs": "Sem mínimo nacional (base Genebra)"
+    }
+  ]
+}

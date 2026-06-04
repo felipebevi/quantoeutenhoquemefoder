@@ -424,7 +424,7 @@
     if(!p || !p.cotacaoBRL || p.cotacaoBRL<=0) return '';
     if(p.moeda==='BRL') return '';                       // mesma moeda do preço
     const val=precoBRL/p.cotacaoBRL;                     // R$ / (R$/unidade) = unidades
-    return `${p.simbolo} ${val.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+    return `${p.bandeira} ${p.simbolo} ${val.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
   }
 
   // salário mensal convertido para BRL (próprio, ou mínimo do país × cotação)

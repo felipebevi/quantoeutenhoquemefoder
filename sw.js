@@ -3,7 +3,7 @@
    - HTML/navegação  → NETWORK-FIRST (sempre pega a versão nova do app; cai no cache se offline)
    - demais assets   → STALE-WHILE-REVALIDATE (rápido e atualiza em background)
    Bump CACHE a cada release para limpar versões antigas. */
-const CACHE = 'qtqmf-v1';
+const CACHE = 'qtqmf-v2';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png',
                 './icon-512.png', './apple-touch-icon.png', './economias.json'];
 

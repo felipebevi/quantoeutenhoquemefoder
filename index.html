@@ -228,6 +228,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   td.p{font-weight:700;white-space:nowrap;}
   td.h{color:var(--accent);font-weight:700;white-space:nowrap;}
   .empty{color:var(--muted);text-align:center;padding:28px 0;font-size:14px;}
+
+  /* ───────────── Tela inicial DESKTOP (PWA é mobile-first) ───────────── */
+  #desktopScreen{justify-content:center;align-items:center;padding:32px;
+    background:radial-gradient(circle at 50% 30%, #131313 0%, #0a0a0a 70%);}
+  .desk{width:100%;max-width:880px;display:flex;gap:48px;align-items:center;justify-content:center;flex-wrap:wrap;}
+  .desk-info{flex:1;min-width:300px;max-width:480px;}
+  .desk-logo{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+  .desk-logo img{width:64px;height:64px;}
+  .desk-logo .name{font-size:28px;font-weight:900;letter-spacing:-.3px;line-height:1.1;}
+  .desk-logo .name .em{color:var(--accent);}
+  .desk h2{font-size:34px;line-height:1.1;font-weight:900;margin:8px 0 14px;letter-spacing:-.5px;}
+  .desk p{font-size:17px;line-height:1.55;color:#bdbdbd;margin:0 0 14px;}
+  .desk .url{display:inline-block;margin-top:4px;font-weight:800;color:var(--accent);font-size:18px;}
+  .qrbox{display:flex;flex-direction:column;align-items:center;gap:14px;
+    background:#fff;padding:22px;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.5);}
+  .qrbox svg, .qrbox object{width:240px;height:240px;display:block;}
+  .qrbox .qrcaption{color:#0a0a0a;font-size:14px;font-weight:700;text-align:center;line-height:1.3;}
+  .qrbox .qrcaption small{display:block;font-weight:500;color:#666;margin-top:3px;}
+  @media (max-width:720px){
+    .desk{flex-direction:column;gap:24px;}
+    .desk h2{font-size:26px;}
+    .qrbox svg, .qrbox object{width:200px;height:200px;}
+  }
   .toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%);
     z-index:40;background:#fff;color:#111;padding:12px 18px;border-radius:10px;font-weight:700;
     font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;pointer-events:none;
@@ -265,6 +288,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <p>É grátis e código aberto. Existe para você enxergar a roubada. Para tirar do abstrato a sensação de que o salário "não rende" e mostrar, em horas concretas do seu suor, quanto cada compra custa. Não é fatalismo — é informação.</p>
   <h2>Posso instalar como app no celular?</h2>
   <p>Sim. É um PWA. No Chrome Android: menu → "Adicionar à tela inicial". No Safari iOS: compartilhar → "Adicionar à tela inicial". Funciona offline depois da primeira carga.</p>
+</section>
+
+<!-- ════════════════ TELA 0 — LANDING DESKTOP (mostra QR para abrir no celular) ════════════════ -->
+<section id="desktopScreen" class="screen">
+  <div class="desk">
+    <div class="desk-info">
+      <div class="desk-logo">
+        <img src="icon.svg" alt="" aria-hidden="true">
+        <span class="name">Quanto eu tenho<br>que me <span class="em">foder</span></span>
+      </div>
+      <h2>Abra no celular.</h2>
+      <p>Salário miséria, inflação alta, imposto em tudo. Esse app pega o preço pela <b>câmera traseira do seu celular</b> e mostra, em horas do seu suor, o tamanho da roubada.</p>
+      <p>Escaneie o QR ao lado, ou abra direto:</p>
+      <a class="url" href="https://quantoeutenhoquemefoder.com.br/">quantoeutenhoquemefoder.com.br</a>
+    </div>
+    <div class="qrbox">
+      <object data="qrcode.svg" type="image/svg+xml" aria-label="QR code para quantoeutenhoquemefoder.com.br" width="240" height="240"></object>
+      <div class="qrcaption">Aponte a câmera<small>e enxergue a realidade</small></div>
+    </div>
+  </div>
 </section>
 
 <!-- ════════════════ TELA 1 — VALOR BASE / ONBOARDING ════════════════ -->
@@ -1200,6 +1243,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* ════════════════════════════════════════════════════════════
      BOOTSTRAP / EVENTOS
      ════════════════════════════════════════════════════════════ */
+  // Heurística simples: telas grandes com cursor fino (mouse) → desktop.
+  // Celulares mais novos podem ter telas largas, então também usamos UA mobile.
+  function isDesktop(){
+    const ua = navigator.userAgent || '';
+    const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua);
+    const finePointer = matchMedia('(pointer:fine)').matches;
+    const big = window.innerWidth >= 900;
+    if(mobileUA) return false;
+    return big && finePointer;
+  }
+
   function validateSetup(){
     const mode=segMode($('setupSeg'));
     const ok = mode==='country' ? !!(economias && $('countrySelect').value)
@@ -1339,6 +1393,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.addEventListener('orientationchange', ()=>setTimeout(resizeOverlay,300));
 
     // decide tela inicial: já há base válida configurada?
+    // Em desktop, mostra a landing com QR code para o usuário abrir no celular.
+    if(isDesktop()){ showScreen($('desktopScreen')); return; }
     if(baseReady()){ goToCamera(); } else { showScreen(setupScreen); }
   }
 

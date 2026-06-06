@@ -329,26 +329,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   // Fallback embutido: garante o modo "país" mesmo se economias.json falhar ao carregar.
   // O arquivo economias.json (atualizado pelo cron) tem precedência quando disponível.
   const ECONOMIAS_FALLBACK = {"moedaBase":"BRL","paises":[
-    {"codigo":"BR","nome":"Brasil","bandeira":"🇧🇷","moeda":"BRL","simbolo":"R$","salarioMinimoMensal":1518,"cotacaoBRL":1.0},
-    {"codigo":"US","nome":"Estados Unidos","bandeira":"🇺🇸","moeda":"USD","simbolo":"US$","salarioMinimoMensal":1257,"cotacaoBRL":5.40},
-    {"codigo":"CN","nome":"China","bandeira":"🇨🇳","moeda":"CNY","simbolo":"¥","salarioMinimoMensal":2690,"cotacaoBRL":0.75},
-    {"codigo":"DE","nome":"Alemanha","bandeira":"🇩🇪","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2222,"cotacaoBRL":6.10},
-    {"codigo":"JP","nome":"Japão","bandeira":"🇯🇵","moeda":"JPY","simbolo":"¥","salarioMinimoMensal":183000,"cotacaoBRL":0.037},
-    {"codigo":"IN","nome":"Índia","bandeira":"🇮🇳","moeda":"INR","simbolo":"₹","salarioMinimoMensal":9750,"cotacaoBRL":0.064},
-    {"codigo":"GB","nome":"Reino Unido","bandeira":"🇬🇧","moeda":"GBP","simbolo":"£","salarioMinimoMensal":2117,"cotacaoBRL":7.10},
-    {"codigo":"FR","nome":"França","bandeira":"🇫🇷","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1802,"cotacaoBRL":6.10},
-    {"codigo":"IT","nome":"Itália","bandeira":"🇮🇹","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1300,"cotacaoBRL":6.10},
-    {"codigo":"CA","nome":"Canadá","bandeira":"🇨🇦","moeda":"CAD","simbolo":"C$","salarioMinimoMensal":2998,"cotacaoBRL":3.95},
-    {"codigo":"RU","nome":"Rússia","bandeira":"🇷🇺","moeda":"RUB","simbolo":"₽","salarioMinimoMensal":22440,"cotacaoBRL":0.068},
-    {"codigo":"MX","nome":"México","bandeira":"🇲🇽","moeda":"MXN","simbolo":"MX$","salarioMinimoMensal":8476,"cotacaoBRL":0.29},
-    {"codigo":"AU","nome":"Austrália","bandeira":"🇦🇺","moeda":"AUD","simbolo":"A$","salarioMinimoMensal":3966,"cotacaoBRL":3.60},
-    {"codigo":"KR","nome":"Coreia do Sul","bandeira":"🇰🇷","moeda":"KRW","simbolo":"₩","salarioMinimoMensal":2096270,"cotacaoBRL":0.0040},
-    {"codigo":"ES","nome":"Espanha","bandeira":"🇪🇸","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1184,"cotacaoBRL":6.10},
-    {"codigo":"ID","nome":"Indonésia","bandeira":"🇮🇩","moeda":"IDR","simbolo":"Rp","salarioMinimoMensal":5067381,"cotacaoBRL":0.00033},
-    {"codigo":"NL","nome":"Países Baixos","bandeira":"🇳🇱","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2335,"cotacaoBRL":6.10},
-    {"codigo":"TR","nome":"Turquia","bandeira":"🇹🇷","moeda":"TRY","simbolo":"₺","salarioMinimoMensal":26005,"cotacaoBRL":0.14},
-    {"codigo":"SA","nome":"Arábia Saudita","bandeira":"🇸🇦","moeda":"SAR","simbolo":"﷼","salarioMinimoMensal":4000,"cotacaoBRL":1.44},
-    {"codigo":"CH","nome":"Suíça","bandeira":"🇨🇭","moeda":"CHF","simbolo":"CHF","salarioMinimoMensal":4426,"cotacaoBRL":6.70}
+    {"codigo":"BR","nome":"Brasil","bandeira":"🇧🇷","moeda":"BRL","simbolo":"R$","salarioMinimoMensal":1518,"horasMensais":220,"cotacaoBRL":1.0},
+    {"codigo":"US","nome":"Estados Unidos","bandeira":"🇺🇸","moeda":"USD","simbolo":"US$","salarioMinimoMensal":1257,"horasMensais":173,"cotacaoBRL":5.40},
+    {"codigo":"CN","nome":"China","bandeira":"🇨🇳","moeda":"CNY","simbolo":"¥","salarioMinimoMensal":2690,"horasMensais":174,"cotacaoBRL":0.75},
+    {"codigo":"DE","nome":"Alemanha","bandeira":"🇩🇪","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2222,"horasMensais":173,"cotacaoBRL":6.10},
+    {"codigo":"JP","nome":"Japão","bandeira":"🇯🇵","moeda":"JPY","simbolo":"¥","salarioMinimoMensal":183000,"horasMensais":173,"cotacaoBRL":0.037},
+    {"codigo":"IN","nome":"Índia","bandeira":"🇮🇳","moeda":"INR","simbolo":"₹","salarioMinimoMensal":9750,"horasMensais":208,"cotacaoBRL":0.064},
+    {"codigo":"GB","nome":"Reino Unido","bandeira":"🇬🇧","moeda":"GBP","simbolo":"£","salarioMinimoMensal":2117,"horasMensais":173,"cotacaoBRL":7.10},
+    {"codigo":"FR","nome":"França","bandeira":"🇫🇷","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1802,"horasMensais":152,"cotacaoBRL":6.10},
+    {"codigo":"IT","nome":"Itália","bandeira":"🇮🇹","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1300,"horasMensais":173,"cotacaoBRL":6.10},
+    {"codigo":"CA","nome":"Canadá","bandeira":"🇨🇦","moeda":"CAD","simbolo":"C$","salarioMinimoMensal":2998,"horasMensais":173,"cotacaoBRL":3.95},
+    {"codigo":"RU","nome":"Rússia","bandeira":"🇷🇺","moeda":"RUB","simbolo":"₽","salarioMinimoMensal":22440,"horasMensais":173,"cotacaoBRL":0.068},
+    {"codigo":"MX","nome":"México","bandeira":"🇲🇽","moeda":"MXN","simbolo":"MX$","salarioMinimoMensal":8476,"horasMensais":208,"cotacaoBRL":0.29},
+    {"codigo":"AU","nome":"Austrália","bandeira":"🇦🇺","moeda":"AUD","simbolo":"A$","salarioMinimoMensal":4179,"horasMensais":165,"cotacaoBRL":3.60},
+    {"codigo":"KR","nome":"Coreia do Sul","bandeira":"🇰🇷","moeda":"KRW","simbolo":"₩","salarioMinimoMensal":2096270,"horasMensais":209,"cotacaoBRL":0.0040},
+    {"codigo":"ES","nome":"Espanha","bandeira":"🇪🇸","moeda":"EUR","simbolo":"€","salarioMinimoMensal":1184,"horasMensais":173,"cotacaoBRL":6.10},
+    {"codigo":"ID","nome":"Indonésia","bandeira":"🇮🇩","moeda":"IDR","simbolo":"Rp","salarioMinimoMensal":5396760,"horasMensais":173,"cotacaoBRL":0.00033},
+    {"codigo":"NL","nome":"Países Baixos","bandeira":"🇳🇱","moeda":"EUR","simbolo":"€","salarioMinimoMensal":2436,"horasMensais":156,"cotacaoBRL":6.10},
+    {"codigo":"TR","nome":"Turquia","bandeira":"🇹🇷","moeda":"TRY","simbolo":"₺","salarioMinimoMensal":26005,"horasMensais":195,"cotacaoBRL":0.14},
+    {"codigo":"SA","nome":"Arábia Saudita","bandeira":"🇸🇦","moeda":"SAR","simbolo":"﷼","salarioMinimoMensal":4000,"horasMensais":208,"cotacaoBRL":1.44},
+    {"codigo":"CH","nome":"Suíça","bandeira":"🇨🇭","moeda":"CHF","simbolo":"CHF","salarioMinimoMensal":4426,"horasMensais":182,"cotacaoBRL":6.70}
   ]};
 
   let stream = null;                      // MediaStream da câmera
@@ -446,11 +446,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     return salary>0 ? salary : 0;
   }
+  // Horas/mês efetivas: no modo país usa a jornada legal do país (BR=220, FR=152, etc.);
+  // no modo "Meu salário" usa o que o usuário configurou.
+  function horasMensaisEfetivo(){
+    if(baseMode==='country'){
+      const p=paisAtual();
+      if(p && p.horasMensais>0) return p.horasMensais;
+    }
+    return horasMes>0 ? horasMes : HORAS_MES_DEFAULT;
+  }
   // valor da hora SEMPRE em BRL (o preço lido também é em BRL) → evidencia a diferença
   function valorHora(){
-    const h = horasMes>0 ? horasMes : HORAS_MES_DEFAULT;
     const s = salarioMensalBRL();
-    return s>0 ? s/h : 0;
+    return s>0 ? s/horasMensaisEfetivo() : 0;
   }
   function baseReady(){ return salarioMensalBRL()>0; }
 
@@ -1025,12 +1033,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
   function updateRateHint(){
     const mode=segMode($('baseSeg'));
-    const h=parseBR($('hoursInput2').value)||HORAS_MES_DEFAULT;
-    let s=0, extra='';
+    let s=0, h=parseBR($('hoursInput2').value)||HORAS_MES_DEFAULT, extra='';
     if(mode==='country'){
       const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect2').value);
-      if(p){ s=p.salarioMinimoMensal*(p.cotacaoBRL||0);
-        extra=` (${p.bandeira} mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')} ≈ R$ ${Math.round(s).toLocaleString('pt-BR')}/mês)`; }
+      if(p){
+        s=p.salarioMinimoMensal*(p.cotacaoBRL||0);
+        if(p.horasMensais>0) h=p.horasMensais;     // jornada do país sobrescreve o input
+        extra=` (${p.bandeira} mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')}/mês · ${h}h/mês)`;
+      }
     } else { s=parseBR($('salaryInput2').value); }
     $('rateHint').textContent = (s>0 && h>0) ? `Valor da hora: ${formatBRL(s/h)}${extra}` : '';
   }
@@ -1067,10 +1077,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function updateCountryHint(){
     const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect').value);
     if(!p){ $('countryHint').textContent=''; return; }
-    const h=parseBR($('hoursInput').value)||HORAS_MES_DEFAULT;
+    // usa as horas do PAÍS (não as do input) p/ refletir a jornada legal local
+    const h = p.horasMensais>0 ? p.horasMensais : (parseBR($('hoursInput').value)||HORAS_MES_DEFAULT);
     const brl=p.salarioMinimoMensal*(p.cotacaoBRL||0);
     $('countryHint').textContent =
-      `Mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')}/mês ≈ R$ ${Math.round(brl).toLocaleString('pt-BR')} • R$ ${(brl/h).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}/h`;
+      `Mín. ${p.simbolo} ${p.salarioMinimoMensal.toLocaleString('pt-BR')}/mês · ${h}h/mês ≈ R$ ${(brl/h).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}/h`;
   }
   // rótulo do botão "Valor base" na câmera (mostra bandeira no modo país)
   function updateBaseChip(){

@@ -1023,6 +1023,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     populateCountrySelect($('countrySelect2'));
     $('salaryInput2').value = salary? salary.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '';
     $('hoursInput2').value = horasMes;
+    // se a base atual é país, exibe as horas do país (alinha com a jornada local)
+    if(baseMode==='country'){ const p=paisAtual(); if(p && p.horasMensais>0) $('hoursInput2').value=p.horasMensais; }
     updateRateHint();
     openModal('baseModal');
     if(force) showToast('Defina o valor base para calcular.');
@@ -1128,15 +1130,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     showSetupBoxes(baseMode);
     if(salary>0) $('salaryInput').value = salary.toLocaleString('pt-BR',{minimumFractionDigits:2});
     $('hoursInput').value = horasMes;
+    // se já há país selecionado em modo país, alinha as horas com a jornada do país
+    if(baseMode==='country'){ const p=paisAtual(); if(p && p.horasMensais>0) $('hoursInput').value=p.horasMensais; }
     updateCountryHint();
     renderLog();
 
     $('setupSeg').querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{
       setSeg($('setupSeg'), b.dataset.mode); showSetupBoxes(b.dataset.mode);
+      if(b.dataset.mode==='country'){
+        const p=paisAtual(); if(p && p.horasMensais>0) $('hoursInput').value=p.horasMensais;
+      } else { $('hoursInput').value=horasMes; }
       updateCountryHint(); validateSetup();
     }));
     $('salaryInput').addEventListener('input', validateSetup);
-    $('countrySelect').addEventListener('change', ()=>{ countryCode=$('countrySelect').value; updateCountryHint(); validateSetup(); });
+    $('countrySelect').addEventListener('change', ()=>{
+      countryCode=$('countrySelect').value;
+      const p=paisAtual();
+      if(p && p.horasMensais>0) $('hoursInput').value=p.horasMensais;  // ← atualiza horas
+      updateCountryHint(); validateSetup();
+    });
     $('hoursInput').addEventListener('input', updateCountryHint);
     validateSetup();
 
@@ -1170,10 +1182,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     // ----- modal de valor base -----
     $('baseSeg').querySelectorAll('.seg-btn').forEach(b=>b.addEventListener('click',()=>{
-      setSeg($('baseSeg'), b.dataset.mode); showBaseBoxes(b.dataset.mode); updateRateHint();
+      setSeg($('baseSeg'), b.dataset.mode); showBaseBoxes(b.dataset.mode);
+      if(b.dataset.mode==='country'){
+        const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect2').value);
+        if(p && p.horasMensais>0) $('hoursInput2').value=p.horasMensais;
+      } else { $('hoursInput2').value=horasMes; }
+      updateRateHint();
     }));
     ['salaryInput2','hoursInput2'].forEach(id=>$(id).addEventListener('input', updateRateHint));
-    $('countrySelect2').addEventListener('change', updateRateHint);
+    $('countrySelect2').addEventListener('change', ()=>{
+      const p=economias && economias.paises.find(x=>x.codigo===$('countrySelect2').value);
+      if(p && p.horasMensais>0) $('hoursInput2').value=p.horasMensais;  // ← atualiza horas
+      updateRateHint();
+    });
 
     $('saveBaseBtn').addEventListener('click', ()=>{
       const mode=segMode($('baseSeg'));

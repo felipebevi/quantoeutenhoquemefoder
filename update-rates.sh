@@ -47,29 +47,30 @@ with open(rates_path, encoding="utf-8") as f: api  = json.load(f)
 # SNAPSHOT — fonte da verdade de salário mínimo e jornada por país.
 # Atualizar quando salários mudarem (geralmente 1× por ano).
 # ════════════════════════════════════════════════════════════════════════
-SALARIOS_REVISADOS_EM = "2025-12-06"
+SALARIOS_REVISADOS_EM = "2026-06-06"
 # (cc, salarioMinimoMensal local, horasMensais, obs)
+# Valores 2026 oficiais quando já anunciados; demais marcados como "2025 (pendente)".
 SNAPSHOT = {
     # cc:   salario,    horas,  obs
-    "BR": ( 1518,       220,    "R$ 1.518 (2025) · CLT 220h/mês"),
-    "US": ( 1257,       173,    "Federal US$ 7,25/h × 173 · 40h/sem"),
-    "CN": ( 2690,       174,    "Xangai ¥ 2.690 · 40h/sem"),
-    "DE": ( 2222,       173,    "€ 12,82/h × 173 · 40h/sem (2025)"),
-    "JP": ( 183000,     173,    "¥ 1.055/h × 173 (média nacional) · 40h/sem"),
-    "IN": ( 9750,       208,    "Mínimo federal não-qualificado · 48h/sem"),
-    "GB": ( 2117,       173,    "National Living Wage £ 12,21/h (abr/2025)"),
-    "FR": ( 1802,       152,    "SMIC bruto € 11,88/h · 35h/sem (2025)"),
+    "BR": ( 1620,       220,    "R$ 1.620 (2026) · INPC + produtividade · CLT 220h/mês"),
+    "US": ( 1257,       173,    "Federal US$ 7,25/h × 173 (sem mudança desde 2009)"),
+    "CN": ( 2740,       174,    "Xangai 2026 ¥ 2.740 · 40h/sem"),
+    "DE": ( 2405,       173,    "Mindestlohn 2026 € 13,90/h × 173 · 40h/sem"),
+    "JP": ( 193000,     173,    "Média nacional ¥ 1.118/h × 173 (anúncios 2026) · 40h/sem"),
+    "IN": ( 9750,       208,    "Mínimo federal não-qualificado (2025, pendente 2026) · 48h/sem"),
+    "GB": ( 2199,       173,    "National Living Wage £ 12,71/h (abr/2026) · 40h/sem"),
+    "FR": ( 1832,       152,    "SMIC € 12,05/h (revisão 2026) · 35h/sem"),
     "IT": ( 1300,       173,    "Sem mínimo legal nacional · convenção coletiva"),
-    "CA": ( 2998,       173,    "Federal C$ 17,30/h × 173 (abr/2025)"),
-    "RU": ( 22440,      173,    "MROT 2025 · 40h/sem"),
-    "MX": ( 8476,       208,    "Zona geral MX$ 278,80/dia · 48h/sem"),
-    "AU": ( 4179,       165,    "A$ 24,10/h × 165 · 38h/sem (jul/2024)"),
-    "KR": ( 2096270,    209,    "₩ 10.030/h × 209 · 40h/sem (2025)"),
-    "ES": ( 1184,       173,    "SMI 14 pagamentos/ano · 40h/sem (2025)"),
-    "ID": ( 5396760,    173,    "UMP Jacarta 2025 · 40h/sem (varia por província)"),
-    "NL": ( 2436,       156,    "€ 14,06/h · 36h/sem média (2025)"),
-    "TR": ( 26005,      195,    "Asgari ücret bruto · 45h/sem (2025)"),
-    "SA": ( 4000,       208,    "Para nacionais · 48h/sem"),
+    "CA": ( 3071,       173,    "Federal C$ 17,75/h × 173 (abr/2026) · 40h/sem"),
+    "RU": ( 27093,      173,    "MROT 2026 ₽ 27.093 · 40h/sem"),
+    "MX": ( 9515,       208,    "Zona geral MX$ 313/dia (2026) · 48h/sem"),
+    "AU": ( 4322,       165,    "A$ 24,95/h × 165 (jul/2025 - vale 2026) · 38h/sem"),
+    "KR": ( 2156880,    209,    "₩ 10.320/h × 209 · 40h/sem (2026)"),
+    "ES": ( 1229,       173,    "SMI 2026 € 17.206/14 pagamentos · 40h/sem"),
+    "ID": ( 5396760,    173,    "UMP Jacarta 2025 (2026 a anunciar dez/2025) · 40h/sem"),
+    "NL": ( 2494,       156,    "€ 14,40/h (jan/2026) · 36h/sem média"),
+    "TR": ( 26005,      195,    "Asgari ücret bruto (2025; revisão 2026 anunciada jan) · 45h/sem"),
+    "SA": ( 4000,       208,    "Para nacionais · 48h/sem (sem mudança 2026)"),
     "CH": ( 4426,       182,    "Sem mínimo nacional (base Genebra CHF 24,48/h · 42h/sem)"),
 }
 # ════════════════════════════════════════════════════════════════════════

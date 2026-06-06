@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+
+  <!-- ÍCONE (cronômetro) à esquerda -->
+  <g transform="translate(60,80)">
+    <rect x="195" y="0"  width="50" height="32" rx="10" fill="#d61f2b"/>
+    <rect x="183" y="28" width="74" height="20" rx="6" fill="#d61f2b"/>
+    <rect x="340" y="86" width="40" height="14" rx="6" fill="#d61f2b"/>
+    <circle cx="220" cy="260" r="186" fill="none" stroke="#d61f2b" stroke-width="36"/>
+    <line x1="220" y1="80"  x2="220" y2="440" stroke="#d61f2b" stroke-width="14" stroke-linecap="round"/>
+    <line x1="50"  y1="260" x2="84"  y2="260" stroke="#d61f2b" stroke-width="16" stroke-linecap="round"/>
+    <line x1="356" y1="260" x2="390" y2="260" stroke="#d61f2b" stroke-width="16" stroke-linecap="round"/>
+    <line x1="220" y1="400" x2="220" y2="432" stroke="#d61f2b" stroke-width="14" stroke-linecap="round"/>
+    <line x1="220" y1="260" x2="120" y2="260" stroke="#d61f2b" stroke-width="22" stroke-linecap="round"/>
+    <line x1="220" y1="260" x2="184" y2="164" stroke="#d61f2b" stroke-width="20" stroke-linecap="round"/>
+    <circle cx="220" cy="260" r="14" fill="#d61f2b"/>
+    <text x="314" y="310" font-family="DejaVu Sans, Arial, sans-serif" font-size="160" font-weight="900"
+          fill="#d61f2b" text-anchor="middle">$</text>
+  </g>
+
+  <!-- TÍTULO e tagline à direita -->
+  <g font-family="DejaVu Sans, Arial, sans-serif">
+    <text x="540" y="170" font-size="68" font-weight="900" fill="#d61f2b">Quanto eu tenho</text>
+    <text x="540" y="248" font-size="68" font-weight="900" fill="#d61f2b">que me foder?</text>
+    <text x="540" y="338" font-size="32" font-weight="700" fill="#222">Seu salário é miséria.</text>
+    <text x="540" y="382" font-size="32" font-weight="700" fill="#222">A inflação corrói. O imposto come.</text>
+    <text x="540" y="450" font-size="28" font-weight="600" fill="#555">Aponte a câmera e veja, em horas</text>
+    <text x="540" y="488" font-size="28" font-weight="600" fill="#555">do seu suor, o que aquele preço CUSTA.</text>
+    <text x="540" y="568" font-size="24" font-weight="800" fill="#d61f2b">quantoeutenhoquemefoder.com.br</text>
+  </g>
+</svg>

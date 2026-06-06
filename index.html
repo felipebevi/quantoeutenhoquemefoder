@@ -4,11 +4,93 @@
 <meta charset="utf-8">
 <!-- viewport-fit=cover para usar a tela toda em notch/iOS; user-scalable=no para evitar zoom acidental durante o scan -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#d61f2b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Quanto eu tenho que me foder">
-<title>Quanto eu tenho que me foder</title>
+
+<!-- ══════════════════════ SEO ══════════════════════ -->
+<title>Quanto eu tenho que me foder? — Calcule em horas de trabalho o preço da sua roubada diária</title>
+<meta name="description" content="Salário mínimo de miséria, inflação que come o que sobra, imposto em tudo e sem retorno. Aponte a câmera para o preço e veja em horas, dias ou SEMANAS do seu suor o que aquilo realmente custa. PWA grátis, OCR 100% local — nenhuma imagem sai do aparelho.">
+<meta name="keywords" content="salário mínimo brasil, salário de fome, inflação brasil, imposto abusivo, custo de vida brasil, preço em horas de trabalho, quanto trabalho para comprar, brasil pobre, comparar salário mínimo paises, calculadora valor da hora, OCR etiqueta, PWA grátis">
+<meta name="author" content="Felipe Bevilaqua">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="googlebot" content="index,follow">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://quantoeutenhoquemefoder.com.br/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quanto eu tenho que me foder">
+<meta property="og:title" content="Quanto eu tenho que me foder? — veja em horas de trabalho o que aquilo custa">
+<meta property="og:description" content="Salário miséria, inflação alta, imposto em tudo. Aponte a câmera para a etiqueta e descubra a verdade: quanto do seu suor aquele preço rouba.">
+<meta property="og:url" content="https://quantoeutenhoquemefoder.com.br/">
+<meta property="og:image" content="https://quantoeutenhoquemefoder.com.br/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Quanto eu tenho que me foder — calculadora visual de tempo de trabalho por preço">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quanto eu tenho que me foder?">
+<meta name="twitter:description" content="Aponte a câmera, leia o preço, descubra em quantas horas de suor aquilo se traduz no país do salário miséria.">
+<meta name="twitter:image" content="https://quantoeutenhoquemefoder.com.br/og-image.png">
+<meta name="twitter:image:alt" content="Quanto eu tenho que me foder — calculadora de horas de trabalho por preço">
+
+<!-- Schema.org JSON-LD: WebApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Quanto eu tenho que me foder",
+  "alternateName": "QTMF",
+  "description": "PWA que lê o preço de uma etiqueta pela câmera (OCR local) e mostra em quanto tempo do seu trabalho aquilo custa, evidenciando o impacto do salário mínimo brasileiro e da inflação.",
+  "url": "https://quantoeutenhoquemefoder.com.br/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (PWA)",
+  "browserRequirements": "HTTPS + camera access",
+  "inLanguage": "pt-BR",
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+  "author": { "@type": "Person", "name": "Felipe Bevilaqua" },
+  "image": "https://quantoeutenhoquemefoder.com.br/og-image.png",
+  "screenshot": "https://quantoeutenhoquemefoder.com.br/og-image.png"
+}
+</script>
+
+<!-- Schema.org JSON-LD: FAQPage (rich snippets) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Por que tudo custa tantas horas do seu trabalho?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Porque o salário mínimo brasileiro está entre os mais baixos do mundo em poder de compra, a inflação corrói o que sobra, e a carga tributária no consumo é uma das maiores do mundo. Cada preço de prateleira já vem com imposto embutido — você paga, e ainda paga de novo quando recebe o salário." } },
+    { "@type": "Question", "name": "Como o aplicativo funciona?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Aponta a câmera para a etiqueta. O OCR roda 100% local no seu celular — nenhuma foto vai para a internet. O app converte o preço em horas, dias, semanas ou meses do seu trabalho com base no seu salário (ou no salário mínimo de outro país, para comparação)." } },
+    { "@type": "Question", "name": "Posso comparar com outros países?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sim. Escolha entre Brasil + as 20 maiores economias do mundo. Cada país tem seu salário mínimo e sua jornada legal (220h no Brasil, 152h na França, 173h nos EUA, etc.) — o app mostra quanto você trabalharia pelo mesmo produto se estivesse lá." } },
+    { "@type": "Question", "name": "Precisa de cadastro? Coleta dados?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Não precisa cadastro. Não tem login. Não tem anúncio. As fotos não saem do aparelho. Métricas anônimas de uso via Google Tag Manager (só páginas visitadas, sem identificar você)." } },
+    { "@type": "Question", "name": "Por que esse nome?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Porque é a sensação no fim do mês. O nome é o resumo honesto da realidade do trabalhador brasileiro: você se mata trabalhando e vê o salário sumir em coisa básica. Esse app é o termômetro da roubada." } }
+  ]
+}
+</script>
+
+<!-- Favicons / Manifest -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+
+<!-- Pré-conexões: corta latência da 1ª leitura (Tesseract CDN) -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+<!-- ══════════════════════ /SEO ══════════════════════ -->
+
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -16,32 +98,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-P8D5RXVB');</script>
 <!-- End Google Tag Manager -->
-<meta name="description" content="Aponte a câmera para uma etiqueta e descubra quanto do seu tempo de trabalho aquele preço custa. OCR 100% local — nada sai do aparelho.">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<!-- SEO / compartilhamento -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Quanto eu tenho que me foder">
-<meta property="og:title" content="Quanto eu tenho que me foder">
-<meta property="og:description" content="Descubra quanto do seu tempo de trabalho um preço custa. OCR 100% local.">
-<meta property="og:url" content="https://quantoeutenhoquemefoder.com.br/">
-<meta property="og:image" content="https://quantoeutenhoquemefoder.com.br/icon-512.png">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Quanto eu tenho que me foder">
-<meta name="twitter:description" content="Descubra quanto do seu tempo de trabalho um preço custa.">
-<meta name="twitter:image" content="https://quantoeutenhoquemefoder.com.br/icon-512.png">
 <style>
   /* ───────────────────────── Tema escuro, mobile-first ───────────────────────── */
   :root{
     --bg:#0a0a0a; --fg:#f5f5f5; --muted:#9a9a9a;
-    --accent:#e63946; --accent-d:#c1121f;
+    --accent:#d61f2b; --accent-d:#a40e1a;
     --danger:#ff5a5a; --card:#161616; --border:#2a2a2a;
     --radius:14px;
     --safe-top:env(safe-area-inset-top,0px);
     --safe-bottom:env(safe-area-inset-bottom,0px);
   }
+  /* Conteúdo só para crawlers/leitores de tela — invisível para o usuário. */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  /* Logo image acima do título da tela inicial */
+  .brand-mark{display:block;margin:0 auto 8px;width:108px;height:108px;}
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -170,11 +241,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+<!-- ════════════════ SEO — conteúdo semântico para crawlers (sr-only) ════════════════ -->
+<header class="sr-only">
+  <h1>Quanto eu tenho que me foder por um produto no Brasil?</h1>
+  <p>Calculadora visual que lê o preço de uma etiqueta pela câmera do celular e converte, na hora, em horas, dias ou semanas do seu trabalho. PWA gratuita, OCR 100% local — nenhuma foto sai do aparelho. Compare com o salário mínimo de 20 economias do mundo e veja o tamanho da roubada que é viver no país do salário miséria, inflação alta e imposto abusivo.</p>
+</header>
+<noscript>
+  <h1>Quanto eu tenho que me foder</h1>
+  <p>Aplicativo precisa de JavaScript habilitado. Configure seu salário e aponte a câmera para uma etiqueta — o app calcula quanto do seu tempo de trabalho aquele preço custa.</p>
+</noscript>
+<section class="sr-only" aria-label="Sobre o aplicativo">
+  <h2>Por que tudo custa tantas horas do seu trabalho?</h2>
+  <p>Porque o salário mínimo brasileiro está entre os mais baixos do mundo em poder de compra, a inflação corrói o que sobra do mês, e a carga tributária no consumo é uma das maiores do mundo. Cada preço que você vê na prateleira já vem com imposto embutido — você paga, e ainda paga de novo quando recebe o salário (INSS, IRRF). O resultado: trabalhar mais para ter menos.</p>
+  <h2>Como o aplicativo funciona?</h2>
+  <p>Você aponta a câmera do celular para a etiqueta de um produto. O OCR (reconhecimento de texto) acontece 100% no seu aparelho — nenhuma imagem é enviada para nenhum servidor. O app pega o preço lido e divide pelo valor da sua hora de trabalho, mostrando o resultado em segundos, minutos, horas, dias ou semanas. É um termômetro honesto do que cada compra custa do seu suor.</p>
+  <h2>Posso comparar com outros países?</h2>
+  <p>Sim. Selecione no modo "Salário mínimo de um país": Brasil, Estados Unidos, China, Alemanha, Japão, Índia, Reino Unido, França, Itália, Canadá, Rússia, México, Austrália, Coreia do Sul, Espanha, Indonésia, Países Baixos, Turquia, Arábia Saudita, Suíça. Cada país tem seu salário mínimo e jornada legal (220h no Brasil, 152h na França, 173h nos EUA). O app converte com a cotação atualizada diariamente.</p>
+  <h2>Quanto custa um produto em horas de trabalho no Brasil?</h2>
+  <p>Depende do preço e do seu salário, mas o app mostra exatamente isso na tela, em tempo real, sobre o produto. Um exemplo do salário mínimo de 2026 (R$ 1.620 por 220h = R$ 7,36/h): um produto de R$ 29,90 custa cerca de 4h da sua vida. Um par de tênis de R$ 500 custa mais de 67h — quase 2 semanas inteiras.</p>
+  <h2>Preciso me cadastrar? Coleta meus dados?</h2>
+  <p>Não precisa cadastro. Não tem login. Não tem anúncio. Não tem rastreador de terceiros. As fotos não saem do celular. Há apenas métricas básicas de uso via Google Tag Manager (páginas e cliques agregados, sem identificar você).</p>
+  <h2>É grátis? Por que existe?</h2>
+  <p>É grátis e código aberto. Existe para você enxergar a roubada. Para tirar do abstrato a sensação de que o salário "não rende" e mostrar, em horas concretas do seu suor, quanto cada compra custa. Não é fatalismo — é informação.</p>
+  <h2>Posso instalar como app no celular?</h2>
+  <p>Sim. É um PWA. No Chrome Android: menu → "Adicionar à tela inicial". No Safari iOS: compartilhar → "Adicionar à tela inicial". Funciona offline depois da primeira carga.</p>
+</section>
+
 <!-- ════════════════ TELA 1 — VALOR BASE / ONBOARDING ════════════════ -->
 <section id="setupScreen" class="screen">
   <div class="card">
+    <img class="brand-mark" src="icon.svg" alt="" aria-hidden="true">
     <h1 class="logo">Quanto eu tenho<br>que me <span class="em">foder</span></h1>
-    <p class="tagline">Aponte a câmera para uma etiqueta e veja <b>quanto do seu tempo de trabalho</b> aquilo custa.</p>
+    <p class="tagline">Salário miséria, inflação alta, imposto em tudo. Aponte a câmera e veja, <b>em horas do seu suor</b>, o que aquilo realmente custa.</p>
 
     <div class="seg" id="setupSeg">
       <button type="button" class="seg-btn active" data-mode="custom">Meu salário</button>
